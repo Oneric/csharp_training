@@ -21,8 +21,8 @@ namespace WebAddressbookTests
         [SetUp]
         public void SetupTest()
         {
-            //driver = new FirefoxDriver();
-            driver = new ChromeDriver();
+            driver = new FirefoxDriver();
+            //driver = new ChromeDriver();
             baseURL = "http://addressbook.course.ru/";
             verificationErrors = new StringBuilder();
         }
