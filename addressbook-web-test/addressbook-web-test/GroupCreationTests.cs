@@ -23,7 +23,7 @@ namespace WebAddressbookTests
         {
             //driver = new FirefoxDriver();
             driver = new ChromeDriver();
-            baseURL = "http://addressbook.course.ru";
+            baseURL = "http://addressbook.course.ru/";
             verificationErrors = new StringBuilder();
         }
 
