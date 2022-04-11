@@ -91,6 +91,10 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("nickname")).Click();
             driver.FindElement(By.Name("nickname")).Clear();
             driver.FindElement(By.Name("nickname")).SendKeys(contact.Nickname);
+            if(contact.Photo != null) 
+            {
+                driver.FindElement(By.Name("photo")).SendKeys(contact.Photo);
+            }
             driver.FindElement(By.Name("title")).Click();
             driver.FindElement(By.Name("title")).Clear();
             driver.FindElement(By.Name("title")).SendKeys(contact.Title);

@@ -12,7 +12,7 @@ namespace WebAddressbookTests
         private string middlename;
         private string lastname;
         private string nickname;
-        private string photo = "";
+        private string photo = null;
         private string title = "";
         private string company = "";
         private string address = "";
