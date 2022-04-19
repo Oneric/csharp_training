@@ -26,11 +26,22 @@ namespace WebAddressbookTests
                 Amonth = "July",
                 Ayear = "2018",
             };
-            app.Contacts
-                .InitNewContactCreation()
-                .FillContactCreationForm(contact)
-                .SubmitContactCreation()
-                .ReturnToHomePage();
+            app.Contacts.Create(contact);
+        }
+        [Test]
+        public void ContactCreationWithoutAniversaryTest()
+        {
+            ContactData contact = new ContactData("Тест1", "Тестович1", "Тестов1")
+            {
+                Nickname = "WithoutAniversaryContact",
+                Email = "test@test.ru",
+                PhoneMobile = "7 (852) 751-25-15",
+                Address = "Moscow, st.Mira 25, ap. 12",
+                Bday = "14",
+                Bmonth = "July",
+                Byear = "1988",
+            };
+            app.Contacts.Create(contact);
         }
     }
 }

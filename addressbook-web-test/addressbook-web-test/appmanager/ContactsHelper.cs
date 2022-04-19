@@ -13,9 +13,13 @@ namespace WebAddressbookTests
         public ContactsHelper(ApplicationManager manager) : base(manager)
         {
         }
-        public ContactsHelper InitNewContactCreation()
+
+        public ContactsHelper Create(ContactData contact)
         {
-            driver.FindElement(By.LinkText("add new")).Click();
+            manager.Navigation.InitNewContactCreation();
+            FillContactCreationForm(contact);
+            SubmitContactCreation();
+            ReturnToHomePage();
             return this;
         }
         public ContactsHelper FillContactCreationForm(ContactData contact)

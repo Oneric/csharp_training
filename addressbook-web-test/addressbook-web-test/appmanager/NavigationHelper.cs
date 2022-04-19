@@ -23,6 +23,11 @@ namespace WebAddressbookTests
             driver.Navigate().GoToUrl(baseURL);
             return this;
         }
+        public NavigationHelper InitNewContactCreation()
+        {
+            driver.FindElement(By.LinkText("add new")).Click();
+            return this;
+        }
         public NavigationHelper GoToGroupsPage()
         {
             driver.FindElement(By.LinkText("groups")).Click();

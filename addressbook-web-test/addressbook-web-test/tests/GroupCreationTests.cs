@@ -17,7 +17,6 @@ namespace WebAddressbookTests
                 Header = "Group header",
                 Footer = "Group footer"
             };
-            app.Navigation.GoToGroupsPage();
             app.Groups.Create(group);
         }
         [Test]
