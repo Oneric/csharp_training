@@ -13,11 +13,46 @@ namespace WebAddressbookTests
     {
         protected ApplicationManager manager;
         protected IWebDriver driver;
+        protected bool acceptNextAlert;
 
         public HelperBase(ApplicationManager manager)
         {
             this.manager = manager;
             driver = manager.Driver;
+        }
+        public bool IsAlertPresent()
+        {
+            try
+            {
+                driver.SwitchTo().Alert();
+                return true;
+            }
+            catch (NoAlertPresentException)
+            {
+                return false;
+            }
+        }
+
+        public string CloseAlertAndGetItsText()
+        {
+            try
+            {
+                IAlert alert = driver.SwitchTo().Alert();
+                string alertText = alert.Text;
+                if (acceptNextAlert)
+                {
+                    alert.Accept();
+                }
+                else
+                {
+                    alert.Dismiss();
+                }
+                return alertText;
+            }
+            finally
+            {
+                acceptNextAlert = true;
+            }
         }
     }
 }

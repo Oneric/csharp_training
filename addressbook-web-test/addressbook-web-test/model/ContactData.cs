@@ -30,7 +30,7 @@ namespace WebAddressbookTests
         private string aday = "";
         private string amonth = "-";
         private string ayear = "";
-        private string newGroup = "[none]";
+        private string newGroup = null;
         private string address2 = "";
         private string phone2 = "";
         private string notes = "";

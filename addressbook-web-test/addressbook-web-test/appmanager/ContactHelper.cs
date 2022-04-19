@@ -8,21 +8,39 @@ using OpenQA.Selenium.Support.UI;
 
 namespace WebAddressbookTests
 {
-    public class ContactsHelper : HelperBase
+    public class ContactHelper : HelperBase
     {
-        public ContactsHelper(ApplicationManager manager) : base(manager)
+        public ContactHelper(ApplicationManager manager) : base(manager)
         {
         }
-
-        public ContactsHelper Create(ContactData contact)
+        public ContactHelper Create(ContactData contact)
         {
             manager.Navigation.InitNewContactCreation();
-            FillContactCreationForm(contact);
+
+            FillContactForm(contact);
             SubmitContactCreation();
             ReturnToHomePage();
             return this;
         }
-        public ContactsHelper FillContactCreationForm(ContactData contact)
+        public ContactHelper Modify(int v, ContactData modyfiedContact)
+        {
+            InitContactModification(v);
+            FillContactForm(modyfiedContact);
+            SubmitContactModification();
+
+            return this;
+        }
+        public ContactHelper Remove(int v)
+        {
+            SelectContact(v);
+            RemoveSelectedContacts();
+            acceptNextAlert = true;
+            CloseAlertAndGetItsText();
+            manager.Navigation.GoToHomePage();
+
+            return this;
+        } 
+        public ContactHelper FillContactForm(ContactData contact)
         {
             driver.FindElement(By.Name("firstname")).Click();
             driver.FindElement(By.Name("firstname")).Clear();
@@ -87,8 +105,11 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("ayear")).Click();
             driver.FindElement(By.Name("ayear")).Clear();
             driver.FindElement(By.Name("ayear")).SendKeys(contact.Ayear);
-            driver.FindElement(By.Name("new_group")).Click();
-            new SelectElement(driver.FindElement(By.Name("new_group"))).SelectByText(contact.NewGroup);
+            if(contact.NewGroup != null) 
+            {
+                driver.FindElement(By.Name("new_group")).Click();
+                new SelectElement(driver.FindElement(By.Name("new_group"))).SelectByText(contact.NewGroup);
+            }
             driver.FindElement(By.Name("address2")).Click();
             driver.FindElement(By.Name("address2")).Clear();
             driver.FindElement(By.Name("address2")).SendKeys(contact.Address2);
@@ -100,14 +121,37 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("notes")).SendKeys(contact.Notes);
             return this;
         }
-        public ContactsHelper SubmitContactCreation()
+        public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.XPath("//form/input[@value='Enter'][2]")).Click();
             return this;
         }
-        public ContactsHelper ReturnToHomePage()
+        public ContactHelper ReturnToHomePage()
         {
             driver.FindElement(By.LinkText("home page")).Click();
+            return this;
+        }
+        public ContactHelper InitContactModification(int v)
+        {
+            driver.FindElement(By.XPath("(//img[@title=\"Edit\"])[" + v + "]")).Click();
+            return this;
+        }
+        public ContactHelper SubmitContactModification()
+        {
+            driver.FindElement(By.XPath("//input[@name=\"update\"][2]")).Click();
+
+            return this;
+        }
+        public ContactHelper SelectContact(int v)
+        {
+            driver.FindElement(By.XPath("(//input[@type=\"checkbox\"])[" + v + "]")).Click();
+
+            return this;
+        }
+        public ContactHelper RemoveSelectedContacts()
+        {
+            driver.FindElement(By.XPath("//input[@value=\"Delete\"]")).Click();
+
             return this;
         }
     }
