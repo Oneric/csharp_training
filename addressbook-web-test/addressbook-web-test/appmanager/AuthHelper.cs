@@ -14,18 +14,36 @@ namespace WebAddressbookTests
         }
         public AuthHelper Login(AccountData account)
         {
-            driver.FindElement(By.Name("user")).Click();
-            driver.FindElement(By.Name("user")).Clear();
-            driver.FindElement(By.Name("user")).SendKeys(account.Username);
-            driver.FindElement(By.Name("pass")).Clear();
-            driver.FindElement(By.Name("pass")).SendKeys(account.Password);
-            driver.FindElement(By.Name("pass")).Click();
+            if (IsLoggedIn())
+            {
+                if (IsLoggedIn(account))
+                {
+                    return this;
+                }
+                Logout();
+            }
+            FeelingTextInput(By.Name("user"), account.Username);
+            FeelingTextInput(By.Name("pass"), account.Password);
             driver.FindElement(By.XPath("//input[@value='Login']")).Click();
             return this;
         }
+
+        public bool IsLoggedIn()
+        {
+           return IsElementPresent(By.LinkText("Logout"));
+        }
+        public bool IsLoggedIn(AccountData account)
+        {
+            return IsLoggedIn()
+                && driver.FindElement(By.XPath("//form[@name=\"logout\"]/b")).Text == "(" + account.Username + ")";
+        }
         public AuthHelper Logout()
         {
-            driver.FindElement(By.LinkText("Logout")).Click();
+            if (IsLoggedIn())
+            {
+                driver.FindElement(By.LinkText("Logout")).Click();
+                return this;
+            }
             return this;
         }
     }

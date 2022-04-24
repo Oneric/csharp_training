@@ -13,27 +13,27 @@ namespace WebAddressbookTests
         private string lastname;
         private string nickname;
         private string photo = null;
-        private string title = "";
-        private string company = "";
-        private string address = "";
-        private string phoneHome = "";
-        private string phoneMobile = "";
-        private string phoneWork = "";
-        private string phoneFax = "";
-        private string email = "";
-        private string email2 = "";
-        private string email3 = "";
-        private string homepage = "";
-        private string bday = "";
-        private string bmonth = "-";
-        private string byear = "";
-        private string aday = "";
-        private string amonth = "-";
-        private string ayear = "";
+        private string title = null;
+        private string company = null;
+        private string address = null;
+        private string phoneHome = null;
+        private string phoneMobile = null;
+        private string phoneWork = null;
+        private string phoneFax = null;
+        private string email = null;
+        private string email2 = null;
+        private string email3 = null;
+        private string homepage = null;
+        private string bday = null;
+        private string bmonth = null;
+        private string byear = null;
+        private string aday = null;
+        private string amonth = null;
+        private string ayear = null;
         private string newGroup = null;
-        private string address2 = "";
-        private string phone2 = "";
-        private string notes = "";
+        private string address2 = null;
+        private string phone2 = null;
+        private string notes = null;
 
         public ContactData(string firstname, string middlename, string lastname )
         {

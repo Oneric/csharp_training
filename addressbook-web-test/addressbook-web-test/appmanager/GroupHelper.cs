@@ -26,19 +26,28 @@ namespace WebAddressbookTests
 
         public GroupHelper Remove(int v)
         {
+
             manager.Navigation.GoToGroupsPage();
 
+            if(!IsExistsGroup(v))
+            {
+                Create(new GroupData("Removing group"));
+            }
             SelectGroup(v);
             RemoveSelectedGroups();
 
             return this;
         }
 
-        public GroupHelper Modify(int p, GroupData modyfiedGroup)
+        public GroupHelper Modify(int v, GroupData modyfiedGroup)
         {
             manager.Navigation.GoToGroupsPage();
 
-            SelectGroup(p);
+            if (!IsExistsGroup(v))
+            {
+                Create(new GroupData("New Group"));
+            }
+            SelectGroup(v);
             InitModifySelectedGroup();
             FillGroupForm(modyfiedGroup);
             SubmitGroupModify();
@@ -55,18 +64,12 @@ namespace WebAddressbookTests
         }
         public GroupHelper FillGroupForm(GroupData group)
         {
-            driver.FindElement(By.Name("group_name")).Click();
-            driver.FindElement(By.Name("group_name")).Clear();
-            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            driver.FindElement(By.Name("group_header")).Click();
-            driver.FindElement(By.Name("group_header")).Clear();
-            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            driver.FindElement(By.Name("group_footer")).Click();
-            driver.FindElement(By.Name("group_footer")).Clear();
-            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
-
+            FeelingTextInput(By.Name("group_name"), group.Name);
+            FeelingTextInput(By.Name("group_header"), group.Header);
+            FeelingTextInput(By.Name("group_footer"), group.Footer);
             return this;
         }
+
         public GroupHelper SubmitGroupCreation()
         {
             driver.FindElement(By.Name("submit")).Click();
@@ -104,6 +107,10 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("delete")).Click();
 
             return this;
+        }
+        public bool IsExistsGroup(int v)
+        {
+            return IsElementPresent(By.XPath("//span[@class=\"group\"][" + v + "]/input"));
         }
     }
 }

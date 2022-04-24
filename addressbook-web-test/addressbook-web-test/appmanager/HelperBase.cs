@@ -20,6 +20,18 @@ namespace WebAddressbookTests
             this.manager = manager;
             driver = manager.Driver;
         }
+        public bool IsElementPresent(By by)
+        {
+            try
+            {
+                driver.FindElement(by);
+                return true;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+        }
         public bool IsAlertPresent()
         {
             try
@@ -32,7 +44,22 @@ namespace WebAddressbookTests
                 return false;
             }
         }
-
+        public void FeelingTextInput(By locator, string text)
+        {
+            if (text != null)
+            {
+                driver.FindElement(locator).Clear();
+                driver.FindElement(locator).SendKeys(text);
+            }
+        }
+        public void SetSelectByText(By locator, string select)
+        {
+            if (select != null)
+            {
+                driver.FindElement(locator).Click();
+                new SelectElement(driver.FindElement(locator)).SelectByText(select);
+            }
+        }
         public string CloseAlertAndGetItsText()
         {
             try
