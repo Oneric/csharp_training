@@ -25,10 +25,6 @@ namespace WebAddressbookTests
         }
         public ContactHelper Modify(int v, ContactData modyfiedContact)
         {
-            if(!IsExistsContact(v))
-            {
-                Create(new ContactData("New1", "Never1", "Newerr1"));
-            }
             InitContactModification(v);
             FillContactForm(modyfiedContact);
             SubmitContactModification();
@@ -38,10 +34,6 @@ namespace WebAddressbookTests
         }
         public ContactHelper Remove(int v)
         {
-            if(!IsExistsContact(v))
-            {
-                Create(new ContactData("New", "For", "Delete"));
-            }
             SelectContact(v);
             RemoveSelectedContacts();
             acceptNextAlert = true;

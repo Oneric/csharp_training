@@ -27,6 +27,10 @@ namespace WebAddressbookTests
                 Amonth = "-",
                 Ayear = "",
             };
+            if (!app.Contacts.IsExistsContact(1))
+            {
+                app.Contacts.Create(new ContactData("New1", "Never1", "Newerr1"));
+            }
             app.Contacts.Modify(1, modyfiedContact);
         }
     }

@@ -29,10 +29,6 @@ namespace WebAddressbookTests
 
             manager.Navigation.GoToGroupsPage();
 
-            if(!IsExistsGroup(v))
-            {
-                Create(new GroupData("Removing group"));
-            }
             SelectGroup(v);
             RemoveSelectedGroups();
 
@@ -43,10 +39,6 @@ namespace WebAddressbookTests
         {
             manager.Navigation.GoToGroupsPage();
 
-            if (!IsExistsGroup(v))
-            {
-                Create(new GroupData("New Group"));
-            }
             SelectGroup(v);
             InitModifySelectedGroup();
             FillGroupForm(modyfiedGroup);
