@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace WebAddressbookTests
 {
     [TestFixture]
-    public class GroupModificationTests : AuthTestBase
+    public class GroupModificationTests : GroupTestBase
     {
         [Test]
         public void GroupModificationTest()
@@ -18,8 +18,6 @@ namespace WebAddressbookTests
                 Header = null,
                 Footer = null
             };
-            // Переходим на страницу групп
-            app.Navigation.GoToGroupsPage();
 
             if (!app.Groups.IsExistsGroup(1))
             {

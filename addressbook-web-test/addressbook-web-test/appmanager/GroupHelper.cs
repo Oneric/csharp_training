@@ -22,18 +22,8 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public GroupHelper Remove(int v)
-        {
-            SelectGroup(v);
-            RemoveSelectedGroups();
-
-            return this;
-        }
-
         public GroupHelper Modify(int v, GroupData modyfiedGroup)
         {
-            manager.Navigation.GoToGroupsPage();
-
             SelectGroup(v);
             InitModifySelectedGroup();
             FillGroupForm(modyfiedGroup);
@@ -42,8 +32,15 @@ namespace WebAddressbookTests
 
             return this;
         }
+        public GroupHelper Remove(int v)
+        {
+            SelectGroup(v);
+            RemoveSelectedGroups();
 
-        public GroupHelper InitNewGroupCreation()
+            return this;
+        }
+
+            public GroupHelper InitNewGroupCreation()
         {
             driver.FindElement(By.Name("new")).Click();
 
