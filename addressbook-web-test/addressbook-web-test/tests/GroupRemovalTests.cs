@@ -13,10 +13,14 @@ namespace WebAddressbookTests
         [Test]
         public void RemoveGroupTest()
         {
+            // Переходим на страницу групп
+            app.Navigation.GoToGroupsPage();
+
             if (!app.Groups.IsExistsGroup(1))
             {
                 app.Groups.Create(new GroupData("Removing group"));
             }
+
             app.Groups.Remove(1);
         }
     }

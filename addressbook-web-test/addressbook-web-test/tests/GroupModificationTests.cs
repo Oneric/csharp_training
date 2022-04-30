@@ -18,10 +18,14 @@ namespace WebAddressbookTests
                 Header = null,
                 Footer = null
             };
+            // Переходим на страницу групп
+            app.Navigation.GoToGroupsPage();
+
             if (!app.Groups.IsExistsGroup(1))
             {
                 app.Groups.Create(new GroupData("New Group"));
             }
+
             app.Groups.Modify(1, modyfiedData);
         }
     }
