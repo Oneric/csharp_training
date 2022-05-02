@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace WebAddressbookTests
 {
@@ -26,7 +27,18 @@ namespace WebAddressbookTests
                 Amonth = "July",
                 Ayear = "2018",
             };
+            
+            List<ContactData> beforeTest = app.Contacts.GetContactList();
+
             app.Contacts.Create(contact);
+
+            List<ContactData> afterTest = app.Contacts.GetContactList();
+            beforeTest.Add(contact);
+
+            beforeTest.Sort();
+            afterTest.Sort();
+
+            Assert.AreEqual(beforeTest, afterTest);
         }
         [Test]
         public void ContactCreationWithoutAniversaryTest()
@@ -41,7 +53,42 @@ namespace WebAddressbookTests
                 Bmonth = "July",
                 Byear = "1988",
             };
+            List<ContactData> beforeTest = app.Contacts.GetContactList();
+
             app.Contacts.Create(contact);
+
+            List<ContactData> afterTest = app.Contacts.GetContactList();
+            beforeTest.Add(contact);
+
+            beforeTest.Sort();
+            afterTest.Sort();
+
+            Assert.AreEqual(beforeTest, afterTest);
+        }
+        [Test]
+        public void ContactCreationWithoBadFieldsDataTest()
+        {
+            ContactData contact = new ContactData("Тест'", "Тестович'", "Тестов'")
+            {
+                Nickname = "'Contact",
+                Email = "test'@test'.ru",
+                PhoneMobile = "7 (852) 751-25-15'",
+                Address = "Moscow', st.Mira 25, ap. 12",
+                Bday = "14",
+                Bmonth = "July",
+                Byear = "1988",
+            };
+            List<ContactData> beforeTest = app.Contacts.GetContactList();
+
+            app.Contacts.Create(contact);
+
+            List<ContactData> afterTest = app.Contacts.GetContactList();
+            beforeTest.Add(contact);
+
+            beforeTest.Sort();
+            afterTest.Sort();
+
+            Assert.AreEqual(beforeTest, afterTest);
         }
     }
 }

@@ -38,10 +38,10 @@ namespace WebAddressbookTests
             RemoveSelectedContacts();
             acceptNextAlert = true;
             CloseAlertAndGetItsText();
-            manager.Navigation.GoToHomePage();
+            ReturnToHomePage();
 
             return this;
-        } 
+        }
         public ContactHelper FillContactForm(ContactData contact)
         {
             FeelingTextInput(By.Name("firstname"), contact.Firstname);
@@ -80,12 +80,12 @@ namespace WebAddressbookTests
         }
         public ContactHelper ReturnToHomePage()
         {
-            driver.FindElement(By.LinkText("home page")).Click();
+            driver.FindElement(By.LinkText("home")).Click();
             return this;
         }
         public ContactHelper InitContactModification(int v)
         {
-            driver.FindElement(By.XPath("(//img[@title=\"Edit\"])[" + v + "]")).Click();
+            driver.FindElement(By.XPath("(//img[@title=\"Edit\"])[" + (v + 1) + "]")).Click();
             return this;
         }
         public ContactHelper SubmitContactModification()
@@ -96,7 +96,7 @@ namespace WebAddressbookTests
         }
         public ContactHelper SelectContact(int v)
         {
-            driver.FindElement(By.XPath("//tr[@name=\"entry\"][" + v + "]//input[@type=\"checkbox\"]")).Click();
+            driver.FindElement(By.XPath("//tr[@name=\"entry\"][" + (v + 1) + "]//input[@type=\"checkbox\"]")).Click();
 
             return this;
         }
@@ -108,7 +108,23 @@ namespace WebAddressbookTests
         }
         public bool IsExistsContact(int v)
         {
-            return IsElementPresent(By.XPath("//tr[@name=\"entry\"][" + v + "]//input[@type=\"checkbox\"]"));
+            return IsElementPresent(By.XPath("//tr[@name=\"entry\"][" + (v + 1) + "]//input[@type=\"checkbox\"]"));
+        }
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contactList = new List<ContactData>();
+
+            ICollection<IWebElement> elements = driver.FindElements(By.XPath("//tr[@name=\"entry\"]"));
+            foreach (IWebElement element in elements)
+            {
+                contactList.Add(new ContactData(element.FindElement(By.XPath("./td[2]")).Text, element.FindElement(By.XPath("./td[3]")).Text)
+                {
+                    Address = element.FindElement(By.XPath("./td[3]")).Text,
+                    Email = element.FindElement(By.XPath("./td[4]")).Text,
+                    PhoneMobile = element.FindElement(By.XPath("./td[5]")).Text,
+                });
+            }
+            return contactList;
         }
     }
 }

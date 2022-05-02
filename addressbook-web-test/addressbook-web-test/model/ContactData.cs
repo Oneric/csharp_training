@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
-    public class ContactData
+    public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
         private string firstname;
-        private string middlename;
+        private string middlename = null;
         private string lastname;
-        private string nickname;
+        private string nickname = null;
         private string photo = null;
         private string title = null;
         private string company = null;
@@ -35,13 +35,17 @@ namespace WebAddressbookTests
         private string phone2 = null;
         private string notes = null;
 
+        public ContactData(string lastname, string firstname)
+        {
+            this.lastname = lastname;
+            this.firstname = firstname;
+        }
         public ContactData(string firstname, string middlename, string lastname )
         {
             this.firstname = firstname;
             this.middlename = middlename;
             this.lastname = lastname;
         }
-
         public string Firstname { get { return firstname; } set { firstname = value; } }
         public string Middlename { get { return middlename; } set { middlename = value; } }
         public string Lastname { get { return lastname; } set { lastname = value; } }
@@ -68,6 +72,35 @@ namespace WebAddressbookTests
         public string Address2 { get { return address2; } set { address2 = value; } }
         public string Phone2 { get { return phone2; } set { phone2 = value; } }
         public string Notes { get { return notes; } set { notes = value; } }
-
+        public bool Equals(ContactData other)
+        {
+            // dotnet_style_prefer_is_null_check_over_reference_equality_method = false
+            if (object.ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (object.ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return this.Firstname == other.Firstname 
+                && this.Lastname == other.Lastname;
+        }
+        public override int GetHashCode()
+        {
+            return Firstname.GetHashCode() + Lastname.GetHashCode();
+        }
+        public override string ToString()
+        {
+            return "Firstname = " + Firstname + "\n" + "Lastname = " + Lastname;
+        }
+        public int CompareTo(ContactData other)
+        {
+            if (object.ReferenceEquals(other, null))
+            {
+                return 1;
+            }
+            return Firstname.CompareTo(other.Firstname) + Lastname.CompareTo(other.Lastname);
+        }
     }
 }

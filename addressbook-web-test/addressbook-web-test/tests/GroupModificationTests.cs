@@ -19,12 +19,22 @@ namespace WebAddressbookTests
                 Footer = null
             };
 
-            if (!app.Groups.IsExistsGroup(1))
+            if (!app.Groups.IsExistsGroup(0))
             {
                 app.Groups.Create(new GroupData("New Group"));
             }
 
-            app.Groups.Modify(1, modyfiedData);
+            List<GroupData> beforeTest = app.Groups.GetGroupList();
+
+            app.Groups.Modify(0, modyfiedData);
+
+            List<GroupData> afterTest = app.Groups.GetGroupList();
+            beforeTest[0].Name = modyfiedData.Name;
+
+            beforeTest.Sort();
+            afterTest.Sort();
+
+            Assert.AreEqual(beforeTest, afterTest);
         }
     }
 }

@@ -13,7 +13,6 @@ namespace WebAddressbookTests
         [Test]
         public void ContactModificationTest()
         {
-
             ContactData modyfiedContact = new ContactData("Обновлен", "Тестович", "Тестов")
             {
                 Nickname = "Modyfied",
@@ -27,11 +26,23 @@ namespace WebAddressbookTests
                 Amonth = "-",
                 Ayear = "",
             };
-            if (!app.Contacts.IsExistsContact(1))
+            if (!app.Contacts.IsExistsContact(0))
             {
                 app.Contacts.Create(new ContactData("New1", "Never1", "Newerr1"));
             }
-            app.Contacts.Modify(1, modyfiedContact);
+
+            List<ContactData> beforeTest = app.Contacts.GetContactList();
+
+            app.Contacts.Modify(0, modyfiedContact);
+
+            List<ContactData> afterTest = app.Contacts.GetContactList();
+
+            beforeTest[0].Firstname = modyfiedContact.Firstname;
+            beforeTest[0].Lastname = modyfiedContact.Lastname;
+            beforeTest.Sort();
+            afterTest.Sort();
+
+            Assert.AreEqual(beforeTest, afterTest);
         }
     }
 }
