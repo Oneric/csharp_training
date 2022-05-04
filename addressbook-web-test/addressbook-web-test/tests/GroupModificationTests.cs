@@ -13,7 +13,7 @@ namespace WebAddressbookTests
         [Test]
         public void GroupModificationTest()
         {
-            GroupData modyfiedData = new GroupData("Modyfied group name")
+            GroupData modifiedData = new GroupData("Modyfied group name")
             {
                 Header = null,
                 Footer = null
@@ -25,16 +25,27 @@ namespace WebAddressbookTests
             }
 
             List<GroupData> beforeTest = app.Groups.GetGroupList();
+            GroupData toBeModified = beforeTest[0];
 
-            app.Groups.Modify(0, modyfiedData);
+            app.Groups.Modify(0, modifiedData);
+
+            Assert.AreEqual(beforeTest.Count, app.Groups.GetGroupCount());
 
             List<GroupData> afterTest = app.Groups.GetGroupList();
-            beforeTest[0].Name = modyfiedData.Name;
+            beforeTest[0].Name = modifiedData.Name;
 
             beforeTest.Sort();
             afterTest.Sort();
 
             Assert.AreEqual(beforeTest, afterTest);
+
+            foreach(GroupData group in afterTest)
+            {
+                if(group.Id == toBeModified.Id)
+                {
+                    Assert.AreEqual(modifiedData.Name, group.Name);
+                }
+            }
         }
     }
 }

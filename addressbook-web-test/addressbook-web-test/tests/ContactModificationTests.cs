@@ -13,7 +13,7 @@ namespace WebAddressbookTests
         [Test]
         public void ContactModificationTest()
         {
-            ContactData modyfiedContact = new ContactData("Обновлен", "Тестович", "Тестов")
+            ContactData modifiedContact = new ContactData("Обновлен", "Тестович", "Тестов")
             {
                 Nickname = "Modyfied",
                 Email = "Modyfied@test.ru",
@@ -32,17 +32,28 @@ namespace WebAddressbookTests
             }
 
             List<ContactData> beforeTest = app.Contacts.GetContactList();
+            ContactData toBeModified = beforeTest[0];
 
-            app.Contacts.Modify(0, modyfiedContact);
+            app.Contacts.Modify(0, modifiedContact);
+
+            Assert.AreEqual(beforeTest.Count, app.Contacts.GetContactCount());
 
             List<ContactData> afterTest = app.Contacts.GetContactList();
 
-            beforeTest[0].Firstname = modyfiedContact.Firstname;
-            beforeTest[0].Lastname = modyfiedContact.Lastname;
+            beforeTest[0].Firstname = modifiedContact.Firstname;
+            beforeTest[0].Lastname = modifiedContact.Lastname;
             beforeTest.Sort();
             afterTest.Sort();
 
             Assert.AreEqual(beforeTest, afterTest);
+            foreach (ContactData contact in afterTest)
+            {
+                if(contact.Id == toBeModified.Id)
+                {
+                    Assert.AreEqual(modifiedContact.Firstname, contact.Firstname); 
+                    Assert.AreEqual(modifiedContact.Lastname, contact.Lastname);
+                }
+            }
         }
     }
 }

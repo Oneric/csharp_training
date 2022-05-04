@@ -76,6 +76,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.XPath("//form/input[@value='Enter'][2]")).Click();
+            contactListCache = null;
             return this;
         }
         public ContactHelper ReturnToHomePage()
@@ -91,6 +92,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactModification()
         {
             driver.FindElement(By.XPath("//input[@name=\"update\"][2]")).Click();
+            contactListCache = null;
 
             return this;
         }
@@ -103,6 +105,7 @@ namespace WebAddressbookTests
         public ContactHelper RemoveSelectedContacts()
         {
             driver.FindElement(By.XPath("//input[@value=\"Delete\"]")).Click();
+            contactListCache = null;
 
             return this;
         }
@@ -110,21 +113,36 @@ namespace WebAddressbookTests
         {
             return IsElementPresent(By.XPath("//tr[@name=\"entry\"][" + (v + 1) + "]//input[@type=\"checkbox\"]"));
         }
+
+        private List<ContactData> contactListCache = null;
+
         public List<ContactData> GetContactList()
         {
-            List<ContactData> contactList = new List<ContactData>();
-
-            ICollection<IWebElement> elements = driver.FindElements(By.XPath("//tr[@name=\"entry\"]"));
-            foreach (IWebElement element in elements)
+            if(contactListCache == null)
             {
-                contactList.Add(new ContactData(element.FindElement(By.XPath("./td[2]")).Text, element.FindElement(By.XPath("./td[3]")).Text)
+                contactListCache = new List<ContactData>();
+
+                ICollection<IWebElement> elements = driver.FindElements(By.XPath("//tr[@name=\"entry\"]"));
+                foreach (IWebElement element in elements)
                 {
-                    Address = element.FindElement(By.XPath("./td[3]")).Text,
-                    Email = element.FindElement(By.XPath("./td[4]")).Text,
-                    PhoneMobile = element.FindElement(By.XPath("./td[5]")).Text,
-                });
+                    contactListCache.Add(
+                        new ContactData(element.FindElement(By.XPath("./td[2]")).Text, element.FindElement(By.XPath("./td[3]")).Text)
+                        {
+                            Id = element.FindElement(By.XPath("./td/input")).GetAttribute("value"),
+                            Address = element.FindElement(By.XPath("./td[3]")).Text,
+                            Email = element.FindElement(By.XPath("./td[4]")).Text,
+                            PhoneMobile = element.FindElement(By.XPath("./td[5]")).Text,
+                        }
+                    );
+                }
+
             }
-            return contactList;
+
+            return new List<ContactData>(contactListCache);
+        }
+        public int GetContactCount()
+        {
+            return driver.FindElements(By.XPath("//tr[@name=\"entry\"]")).Count;
         }
     }
 }

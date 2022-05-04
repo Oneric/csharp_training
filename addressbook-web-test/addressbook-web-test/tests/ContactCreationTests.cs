@@ -32,6 +32,8 @@ namespace WebAddressbookTests
 
             app.Contacts.Create(contact);
 
+            Assert.AreEqual(beforeTest.Count + 1, app.Contacts.GetContactCount());
+
             List<ContactData> afterTest = app.Contacts.GetContactList();
             beforeTest.Add(contact);
 
@@ -57,6 +59,8 @@ namespace WebAddressbookTests
 
             app.Contacts.Create(contact);
 
+            Assert.AreEqual(beforeTest.Count + 1, app.Contacts.GetContactCount());
+
             List<ContactData> afterTest = app.Contacts.GetContactList();
             beforeTest.Add(contact);
 
@@ -81,6 +85,8 @@ namespace WebAddressbookTests
             List<ContactData> beforeTest = app.Contacts.GetContactList();
 
             app.Contacts.Create(contact);
+
+            Assert.AreEqual(beforeTest.Count + 1, app.Contacts.GetContactCount());
 
             List<ContactData> afterTest = app.Contacts.GetContactList();
             beforeTest.Add(contact);

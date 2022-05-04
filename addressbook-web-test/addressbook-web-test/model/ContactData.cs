@@ -8,70 +8,44 @@ namespace WebAddressbookTests
 {
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
-        private string firstname;
-        private string middlename = null;
-        private string lastname;
-        private string nickname = null;
-        private string photo = null;
-        private string title = null;
-        private string company = null;
-        private string address = null;
-        private string phoneHome = null;
-        private string phoneMobile = null;
-        private string phoneWork = null;
-        private string phoneFax = null;
-        private string email = null;
-        private string email2 = null;
-        private string email3 = null;
-        private string homepage = null;
-        private string bday = null;
-        private string bmonth = null;
-        private string byear = null;
-        private string aday = null;
-        private string amonth = null;
-        private string ayear = null;
-        private string newGroup = null;
-        private string address2 = null;
-        private string phone2 = null;
-        private string notes = null;
-
         public ContactData(string lastname, string firstname)
         {
-            this.lastname = lastname;
-            this.firstname = firstname;
+            Lastname = lastname;
+            Firstname = firstname;
         }
         public ContactData(string firstname, string middlename, string lastname )
         {
-            this.firstname = firstname;
-            this.middlename = middlename;
-            this.lastname = lastname;
+            Firstname = firstname;
+            Middlename = middlename;
+            Lastname = lastname;
         }
-        public string Firstname { get { return firstname; } set { firstname = value; } }
-        public string Middlename { get { return middlename; } set { middlename = value; } }
-        public string Lastname { get { return lastname; } set { lastname = value; } }
-        public string Nickname { get { return nickname; } set { nickname = value; } }
-        public string Photo { get { return photo; } set { photo = value; } }
-        public string Title { get { return title; } set { title = value; } }
-        public string Company { get { return company; } set { company = value; } }
-        public string Address { get { return address; } set { address = value; } }
-        public string PhoneHome { get { return phoneHome; } set { phoneHome = value; } }
-        public string PhoneMobile { get { return phoneMobile; } set { phoneMobile = value; } }
-        public string PhoneWork { get { return phoneWork; } set { phoneWork = value; } }
-        public string PhoneFax { get { return phoneFax; } set { phoneFax = value; } }
-        public string Email { get { return email; } set { email = value; } }
-        public string Email2 { get { return email2; } set { email2 = value; } }
-        public string Email3 { get { return email3; } set { email3 = value; } }
-        public string Homepage { get { return homepage; } set { homepage = value; } }
-        public string Bday { get { return bday; } set { bday = value; } }
-        public string Bmonth { get { return bmonth; } set { bmonth = value; } }
-        public string Byear { get { return byear; } set { byear = value; } }
-        public string Aday { get { return aday; } set { aday = value; } }
-        public string Amonth { get { return amonth; } set { amonth = value; } }
-        public string Ayear { get { return ayear; } set { ayear = value; } }
-        public string NewGroup { get { return newGroup; } set { newGroup = value; } }
-        public string Address2 { get { return address2; } set { address2 = value; } }
-        public string Phone2 { get { return phone2; } set { phone2 = value; } }
-        public string Notes { get { return notes; } set { notes = value; } }
+        public string Id { get; set; }
+        public string Firstname { get; set; }
+        public string Middlename { get; set; } = null;
+        public string Lastname { get; set; }
+        public string Nickname { get; set; } = null;
+        public string Photo { get; set; } = null;
+        public string Title { get; set; } = null;
+        public string Company { get; set; } = null;
+        public string Address { get; set; } = null;
+        public string PhoneHome { get; set; } = null;
+        public string PhoneMobile { get; set; } = null;
+        public string PhoneWork { get; set; } = null;
+        public string PhoneFax { get; set; } = null;
+        public string Email { get; set; } = null;
+        public string Email2 { get; set; } = null;
+        public string Email3 { get; set; } = null;
+        public string Homepage { get; set; } = null;
+        public string Bday { get; set; } = null;
+        public string Bmonth { get; set; } = null;
+        public string Byear { get; set; } = null;
+        public string Aday { get; set; } = null;
+        public string Amonth { get; set; } = null;
+        public string Ayear { get; set; } = null;
+        public string NewGroup { get; set; } = null;
+        public string Address2 { get; set; } = null;
+        public string Phone2 { get; set; } = null;
+        public string Notes { get; set; } = null;
         public bool Equals(ContactData other)
         {
             // dotnet_style_prefer_is_null_check_over_reference_equality_method = false

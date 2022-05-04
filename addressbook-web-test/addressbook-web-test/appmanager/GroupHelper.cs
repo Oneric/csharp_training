@@ -57,6 +57,7 @@ namespace WebAddressbookTests
         public GroupHelper SubmitGroupCreation()
         {
             driver.FindElement(By.Name("submit")).Click();
+            groupListCache = null;
 
             return this;
         }
@@ -69,6 +70,7 @@ namespace WebAddressbookTests
         public GroupHelper SubmitGroupModify()
         {
             driver.FindElement(By.Name("update")).Click();
+            groupListCache = null;
 
             return this;
         }
@@ -89,6 +91,7 @@ namespace WebAddressbookTests
         public GroupHelper RemoveSelectedGroups()
         {
             driver.FindElement(By.Name("delete")).Click();
+            groupListCache = null;
 
             return this;
         }
@@ -96,15 +99,31 @@ namespace WebAddressbookTests
         {
             return IsElementPresent(By.XPath("//span[@class=\"group\"][" + (v + 1) + "]/input"));
         }
+
+        private List<GroupData> groupListCache = null; 
+
         public List<GroupData> GetGroupList()
         {
-            List<GroupData> groupList = new List<GroupData>();
-            ICollection<IWebElement> elements = driver.FindElements(By.XPath("//span[@class=\"group\"]"));
-            foreach (IWebElement element in elements)
+            
+            if (groupListCache == null)
             {
-                groupList.Add(new GroupData(element.Text));
+                groupListCache = new List<GroupData>();
+                ICollection<IWebElement> elements = driver.FindElements(By.XPath("//span[@class=\"group\"]"));
+                foreach (IWebElement element in elements)
+                {
+                    groupListCache.Add(
+                        new GroupData(element.Text)
+                        {
+                            Id = element.FindElement(By.XPath("./input")).GetAttribute("value"),
+                        }
+                    );
+                }
             }
-            return groupList;
+            return new List<GroupData>(groupListCache);
+        }
+        public int GetGroupCount()
+        {
+            return driver.FindElements(By.XPath("//span[@class=\"group\"]")).Count;
         }
     }
 }
