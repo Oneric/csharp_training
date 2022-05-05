@@ -129,9 +129,9 @@ namespace WebAddressbookTests
                         new ContactData(element.FindElement(By.XPath("./td[2]")).Text, element.FindElement(By.XPath("./td[3]")).Text)
                         {
                             Id = element.FindElement(By.XPath("./td/input")).GetAttribute("value"),
-                            Address = element.FindElement(By.XPath("./td[3]")).Text,
-                            Email = element.FindElement(By.XPath("./td[4]")).Text,
-                            PhoneMobile = element.FindElement(By.XPath("./td[5]")).Text,
+                            Address = element.FindElement(By.XPath("./td[4]")).Text,
+                            Email = element.FindElement(By.XPath("./td[5]")).Text,
+                            PhoneMobile = element.FindElement(By.XPath("./td[6]")).Text,
                         }
                     );
                 }
