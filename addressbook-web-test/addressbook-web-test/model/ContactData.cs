@@ -8,6 +8,9 @@ namespace WebAddressbookTests
 {
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
+        private string phoneAll = null;
+        private string emailAll = null;
+
         public ContactData(string lastname, string firstname)
         {
             Lastname = lastname;
@@ -46,6 +49,52 @@ namespace WebAddressbookTests
         public string Address2 { get; set; } = null;
         public string Phone2 { get; set; } = null;
         public string Notes { get; set; } = null;
+        public string EmailAll 
+        {
+            get
+            {
+                if (emailAll != null)
+                {
+                    return emailAll;
+                }
+                else
+                {
+                    return (CleanUp(Email) + CleanUp(Email2) + CleanUp(Email3)).Trim();
+                }
+            }
+            set
+            {
+                emailAll = value;
+            }
+        }
+        public string PhoneAll 
+        {
+            get
+            {
+                if(phoneAll != null)
+                {
+                    return phoneAll;
+                }
+                else
+                {
+                    return (CleanUp(PhoneHome) + CleanUp(PhoneMobile) + CleanUp(PhoneWork)).Trim();
+                }
+            }
+            set
+            {
+                phoneAll = value;
+            }
+        }
+
+        private string CleanUp(string value)
+        {
+            if(value == null || value == "")
+            {
+                return "";
+            }
+            return value.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "") + "\r\n";
+        }
+
         public bool Equals(ContactData other)
         {
             // dotnet_style_prefer_is_null_check_over_reference_equality_method = false
@@ -74,7 +123,7 @@ namespace WebAddressbookTests
             {
                 return 1;
             }
-            return Firstname.CompareTo(other.Firstname) + Lastname.CompareTo(other.Lastname);
+            return Firstname.CompareTo(other.Firstname) != 0 ? Firstname.CompareTo(other.Firstname) : Lastname.CompareTo(other.Lastname);
         }
     }
 }

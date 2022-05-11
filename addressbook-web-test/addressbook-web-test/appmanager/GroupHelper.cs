@@ -12,6 +12,11 @@ namespace WebAddressbookTests
         public GroupHelper(ApplicationManager manager) : base(manager)
         {
         }
+        /// <summary>
+        /// Набор шагов для создания новой группы
+        /// </summary>
+        /// <param name="group">Объект класса GroupData с данными для создания новой группы</param>
+        /// <returns></returns>
         public GroupHelper Create(GroupData group)
         {
             InitNewGroupCreation();
@@ -21,6 +26,12 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Набор шагов для изменения группы с индексом v
+        /// </summary>
+        /// <param name="v">Индекс</param>
+        /// <param name="modyfiedGroup">Объект класса GroupData с данными для изменения группы</param>
+        /// <returns></returns>
         public GroupHelper Modify(int v, GroupData modyfiedGroup)
         {
             SelectGroup(v);
@@ -31,6 +42,11 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Набор шагов для удаления группы с индексом v
+        /// </summary>
+        /// <param name="v">Индекс</param>
+        /// <returns></returns>
         public GroupHelper Remove(int v)
         {
             SelectGroup(v);
@@ -39,13 +55,21 @@ namespace WebAddressbookTests
 
             return this;
         }
-
-            public GroupHelper InitNewGroupCreation()
+        /// <summary>
+        /// Нажимаем кнопку New group на странице groups
+        /// </summary>
+        /// <returns></returns>
+        public GroupHelper InitNewGroupCreation()
         {
             driver.FindElement(By.Name("new")).Click();
 
             return this;
         }
+        /// <summary>
+        /// Заполняем форму создания группы
+        /// </summary>
+        /// <param name="group">Объект класса GroupData</param>
+        /// <returns></returns>
         public GroupHelper FillGroupForm(GroupData group)
         {
             FeelingTextInput(By.Name("group_name"), group.Name);
@@ -53,7 +77,10 @@ namespace WebAddressbookTests
             FeelingTextInput(By.Name("group_footer"), group.Footer);
             return this;
         }
-
+        /// <summary>
+        /// Нажимаем кнопку Enter information на форме создания группы
+        /// </summary>
+        /// <returns></returns>
         public GroupHelper SubmitGroupCreation()
         {
             driver.FindElement(By.Name("submit")).Click();
@@ -61,12 +88,20 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Возврат на страницу group page
+        /// </summary>
+        /// <returns></returns>
         public GroupHelper ReturnToGroupsPage()
         {
             driver.FindElement(By.LinkText("group page")).Click();
 
             return this;
         }
+        /// <summary>
+        /// Сохраняем изменения группы
+        /// </summary>
+        /// <returns></returns>
         public GroupHelper SubmitGroupModify()
         {
             driver.FindElement(By.Name("update")).Click();
@@ -74,20 +109,31 @@ namespace WebAddressbookTests
 
             return this;
         }
-
+        /// <summary>
+        /// Нажимаем кнопку Edit
+        /// </summary>
+        /// <returns></returns>
         public GroupHelper InitModifySelectedGroup()
         {
             driver.FindElement(By.Name("edit")).Click();
 
             return this;
         }
-
-        public GroupHelper SelectGroup(int p)
+        /// <summary>
+        /// Активируем чекбокс группы с индексом v
+        /// </summary>
+        /// <param name="v">Индекс</param>
+        /// <returns></returns>
+        public GroupHelper SelectGroup(int v)
         {
-            driver.FindElement(By.XPath("//span[@class=\"group\"][" + (p + 1) + "]/input")).Click();
+            driver.FindElement(By.XPath("//span[@class=\"group\"][" + (v + 1) + "]/input")).Click();
 
             return this;
         }
+        /// <summary>
+        /// Удаляем выбранную группу
+        /// </summary>
+        /// <returns></returns>
         public GroupHelper RemoveSelectedGroups()
         {
             driver.FindElement(By.Name("delete")).Click();
@@ -95,13 +141,21 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Проверяем наличие группы с индексом v
+        /// </summary>
+        /// <param name="v">Индекс</param>
+        /// <returns></returns>
         public bool IsExistsGroup(int v)
         {
             return IsElementPresent(By.XPath("//span[@class=\"group\"][" + (v + 1) + "]/input"));
         }
 
         private List<GroupData> groupListCache = null; 
-
+        /// <summary>
+        /// Получаем список групп
+        /// </summary>
+        /// <returns></returns>
         public List<GroupData> GetGroupList()
         {
             
@@ -112,15 +166,33 @@ namespace WebAddressbookTests
                 foreach (IWebElement element in elements)
                 {
                     groupListCache.Add(
-                        new GroupData(element.Text)
+                        new GroupData(null)
                         {
                             Id = element.FindElement(By.XPath("./input")).GetAttribute("value"),
                         }
                     );
                 }
+                string allGroupNames = driver.FindElement(By.CssSelector("div#content form")).Text;
+                string[] groupNames = allGroupNames.Split('\n');
+                int shift = groupListCache.Count - groupNames.Length;
+                for (int i = 0; i < groupListCache.Count; i++)
+                {
+                    if(i < shift)
+                    {
+                        groupListCache[i].Name = "";
+                    }
+                    else
+                    {
+                        groupListCache[i].Name = groupNames[i-shift].Trim();
+                    }
+                }
             }
             return new List<GroupData>(groupListCache);
         }
+        /// <summary>
+        /// Получаем количество групп
+        /// </summary>
+        /// <returns></returns>
         public int GetGroupCount()
         {
             return driver.FindElements(By.XPath("//span[@class=\"group\"]")).Count;

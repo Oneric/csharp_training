@@ -13,6 +13,11 @@ namespace WebAddressbookTests
         public ContactHelper(ApplicationManager manager) : base(manager)
         {
         }
+        /// <summary>
+        /// Набор шагов для создания нового контакта
+        /// </summary>
+        /// <param name="contact">Объект класса ContactData с данными для создания нового контакта</param>
+        /// <returns></returns>
         public ContactHelper Create(ContactData contact)
         {
             manager.Navigation.InitNewContactCreation();
@@ -23,6 +28,12 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Набор шагов для изменения контакта
+        /// </summary>
+        /// <param name="v">Индекс изменяемого контакта</param>
+        /// <param name="modyfiedContact">Объект класса ContactData с данными для изменения контакта</param>
+        /// <returns></returns>
         public ContactHelper Modify(int v, ContactData modyfiedContact)
         {
             InitContactModification(v);
@@ -32,6 +43,11 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Набор шагов для удаления контакта
+        /// </summary>
+        /// <param name="v">Индекс контакта для удаления</param>
+        /// <returns></returns>
         public ContactHelper Remove(int v)
         {
             SelectContact(v);
@@ -42,6 +58,11 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Заполняем форму контакта
+        /// </summary>
+        /// <param name="contact">Объект класса ContactData</param>
+        /// <returns></returns>
         public ContactHelper FillContactForm(ContactData contact)
         {
             FeelingTextInput(By.Name("firstname"), contact.Firstname);
@@ -73,22 +94,39 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Нажимаем кнопку Enter на форме созданий контакта
+        /// </summary>
+        /// <returns></returns>
         public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.XPath("//form/input[@value='Enter'][2]")).Click();
             contactListCache = null;
             return this;
         }
+        /// <summary>
+        /// Возврат на главную страницу
+        /// </summary>
+        /// <returns></returns>
         public ContactHelper ReturnToHomePage()
         {
             driver.FindElement(By.LinkText("home")).Click();
             return this;
         }
+        /// <summary>
+        /// Инициирует процесс модификации записи с указанным индексом
+        /// </summary>
+        /// <param name="v">Индекс записи</param>
+        /// <returns></returns>
         public ContactHelper InitContactModification(int v)
         {
-            driver.FindElement(By.XPath("(//img[@title=\"Edit\"])[" + (v + 1) + "]")).Click();
+            driver.FindElement(By.XPath($"(//img[@title=\"Edit\"])[{ v + 1 }]")).Click();
             return this;
         }
+        /// <summary>
+        /// Нажимаем кнопку Update на форме изменения контакта
+        /// </summary>
+        /// <returns></returns>
         public ContactHelper SubmitContactModification()
         {
             driver.FindElement(By.XPath("//input[@name=\"update\"][2]")).Click();
@@ -96,12 +134,21 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Активируем чекбокс контакта с индексом
+        /// </summary>
+        /// <param name="v">Индекс</param>
+        /// <returns></returns>
         public ContactHelper SelectContact(int v)
         {
-            driver.FindElement(By.XPath("//tr[@name=\"entry\"][" + (v + 1) + "]//input[@type=\"checkbox\"]")).Click();
+            driver.FindElement(By.XPath($"//tr[@name=\"entry\"][{ v + 1 }]//input[@type=\"checkbox\"]")).Click();
 
             return this;
         }
+        /// <summary>
+        /// Удаляем выбрвнный контакт
+        /// </summary>
+        /// <returns></returns>
         public ContactHelper RemoveSelectedContacts()
         {
             driver.FindElement(By.XPath("//input[@value=\"Delete\"]")).Click();
@@ -109,13 +156,21 @@ namespace WebAddressbookTests
 
             return this;
         }
+        /// <summary>
+        /// Проверяем   наличие контакта по заданному индексу
+        /// </summary>
+        /// <param name="v">Индекс</param>
+        /// <returns>Is exsist contact return true else return false</returns>
         public bool IsExistsContact(int v)
         {
-            return IsElementPresent(By.XPath("//tr[@name=\"entry\"][" + (v + 1) + "]//input[@type=\"checkbox\"]"));
+            return IsElementPresent(By.XPath($"//tr[@name=\"entry\"][{ v + 1 }]//input[@type=\"checkbox\"]"));
         }
 
         private List<ContactData> contactListCache = null;
-
+        /// <summary>
+        /// Получаем список контактов со страницы
+        /// </summary>
+        /// <returns></returns>
         public List<ContactData> GetContactList()
         {
             if(contactListCache == null)
@@ -140,9 +195,65 @@ namespace WebAddressbookTests
 
             return new List<ContactData>(contactListCache);
         }
+        /// <summary>
+        /// Получаем количество контактов
+        /// </summary>
+        /// <returns></returns>
         public int GetContactCount()
         {
             return driver.FindElements(By.XPath("//tr[@name=\"entry\"]")).Count;
+        }
+        /// <summary>
+        /// Получает данные о контакте из таблицы контактов на главной странице по индексу записи
+        /// </summary>
+        /// <param name="v">Индекс записи</param>
+        /// <returns>Возвращает объект класса ContactData</returns>
+        public ContactData GetContactDataFromTable(int v)
+        {
+            IList<IWebElement> cells = driver.FindElements(By.Name("entry"))[v].FindElements(By.TagName("td"));
+            
+            string lastName = cells[1].Text;
+            string firstName = cells[2].Text;
+            string address = cells[3].Text;
+            string emailAll = cells[4].Text;
+            string phoneAll = cells[5].Text;
+
+
+            return new ContactData(lastName, firstName)
+            {
+                Address = address,
+                EmailAll = emailAll,
+                PhoneAll = phoneAll
+            };
+        }
+        /// <summary>
+        /// Переходит на страницу редактирования по индексу записи и получает данные из формы редактирования
+        /// </summary>
+        /// <param name="v">Индекс записи</param>
+        /// <returns>Возвращает объект класса ContactData</returns>
+        public ContactData GetContactDataFromEditForm(int v)
+        {
+            InitContactModification(v);
+            string firstName = driver.FindElement(By.Name("firstname")).GetAttribute("value");
+            string lastName = driver.FindElement(By.Name("lastname")).GetAttribute("value");
+            string address = driver.FindElement(By.Name("address")).Text;
+            string phoneHome = driver.FindElement(By.Name("home")).GetAttribute("value");
+            string phoneMobile = driver.FindElement(By.Name("mobile")).GetAttribute("value");
+            string phoneWork = driver.FindElement(By.Name("work")).GetAttribute("value");
+            string email = driver.FindElement(By.Name("email")).GetAttribute("value");
+            string email2 = driver.FindElement(By.Name("email2")).GetAttribute("value");
+            string email3 = driver.FindElement(By.Name("email3")).GetAttribute("value");
+
+            return new ContactData(lastName, firstName)
+            {
+                Address = address,
+                PhoneHome = phoneHome,
+                PhoneMobile = phoneMobile,
+                PhoneWork = phoneWork,
+                Email = email,
+                Email2 = email2,
+                Email3 = email3,
+            };
         }
     }
 }

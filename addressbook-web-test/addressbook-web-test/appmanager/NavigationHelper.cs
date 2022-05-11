@@ -17,7 +17,10 @@ namespace WebAddressbookTests
         {
             this.baseURL = baseURL;
         }
-
+        /// <summary>
+        /// Переходим на главную страницу
+        /// </summary>
+        /// <returns></returns>
         public NavigationHelper GoToHomePage()
         {
             if(driver.Url == baseURL)
@@ -27,6 +30,10 @@ namespace WebAddressbookTests
             driver.Navigate().GoToUrl(baseURL);
             return this;
         }
+        /// <summary>
+        /// Нажимаем на ссылку add new для создания нового контакта
+        /// </summary>
+        /// <returns></returns>
         public NavigationHelper InitNewContactCreation()
         {
             if(driver.Url == baseURL + "/edit.php" && driver.FindElement(By.XPath("//div[@id=\"content\"]/h1")).Text.Equals("Edit / add address book entry"))
@@ -36,6 +43,10 @@ namespace WebAddressbookTests
             driver.FindElement(By.LinkText("add new")).Click();
             return this;
         }
+        /// <summary>
+        /// Переходим на страницу groups
+        /// </summary>
+        /// <returns></returns>
         public NavigationHelper GoToGroupsPage()
         {
             if (driver.FindElement(By.XPath("//title")).Text.Contains("Groups") && IsElementPresent(By.Name("new")))

@@ -44,6 +44,11 @@ namespace WebAddressbookTests
                 return false;
             }
         }
+        /// <summary>
+        /// Заполняем текстовы input
+        /// </summary>
+        /// <param name="locator">Локатор</param>
+        /// <param name="text">Текст</param>
         public void FeelingTextInput(By locator, string text)
         {
             if (text != null)
@@ -52,6 +57,11 @@ namespace WebAddressbookTests
                 driver.FindElement(locator).SendKeys(text);
             }
         }
+        /// <summary>
+        /// Обработка элементов селекта
+        /// </summary>
+        /// <param name="locator">Локатор</param>
+        /// <param name="select">Текст селекта</param>
         public void SetSelectByText(By locator, string select)
         {
             if (select != null)
