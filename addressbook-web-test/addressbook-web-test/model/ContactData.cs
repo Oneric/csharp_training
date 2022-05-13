@@ -103,7 +103,7 @@ namespace WebAddressbookTests
                     string birthday = $"{ Bday }. {Bmonth} {Byear}";
                     string anniversary = $"{ Aday }. {Amonth} {Ayear}";
                     return
-                        /* Для потомков разобраться как сделать более эстетично
+                        /* Для потомков
                         $"{ Firstname } {Middlename} { Lastname }\r\n" +
                         $"{ Nickname }\r\n" +
                         $"{ Address }\r\n\r\n" +
@@ -172,7 +172,7 @@ namespace WebAddressbookTests
             {
                 return "";
             }
-            return  Regex.Replace(value, "[\\^H:$\\^M:$\\^W:$\\^F:$ \\r\\n()-]", "");
+            return  Regex.Replace(value, "[ ()-]", "") + "\r\n";
         }
 
         public bool Equals(ContactData other)
