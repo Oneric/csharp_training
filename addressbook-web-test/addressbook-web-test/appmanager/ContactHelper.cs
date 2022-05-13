@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using System.Text.RegularExpressions;
 
 namespace WebAddressbookTests
 {
@@ -124,6 +125,16 @@ namespace WebAddressbookTests
             return this;
         }
         /// <summary>
+        /// Открывает страниццу детальной информации о контакте с индексом v
+        /// </summary>
+        /// <param name="v">Индекс записи</param>
+        /// <returns></returns>
+        public ContactHelper OpenContactDetails(int v)
+        {
+            driver.FindElement(By.XPath($"(//img[@title=\"Details\"])[{ v + 1 }]")).Click();
+            return this;
+        }
+        /// <summary>
         /// Нажимаем кнопку Update на форме изменения контакта
         /// </summary>
         /// <returns></returns>
@@ -195,6 +206,12 @@ namespace WebAddressbookTests
 
             return new List<ContactData>(contactListCache);
         }
+        public int GetNumberOfSearchResults()
+        {
+            string text = driver.FindElement(By.TagName("label")).Text;
+            Match value = new Regex(@"\d+").Match(text);
+            return int.Parse(value.Value);
+        }
         /// <summary>
         /// Получаем количество контактов
         /// </summary>
@@ -235,25 +252,57 @@ namespace WebAddressbookTests
         {
             InitContactModification(v);
             string firstName = driver.FindElement(By.Name("firstname")).GetAttribute("value");
+            string middlename = driver.FindElement(By.Name("middlename")).GetAttribute("value");
             string lastName = driver.FindElement(By.Name("lastname")).GetAttribute("value");
             string address = driver.FindElement(By.Name("address")).Text;
             string phoneHome = driver.FindElement(By.Name("home")).GetAttribute("value");
             string phoneMobile = driver.FindElement(By.Name("mobile")).GetAttribute("value");
             string phoneWork = driver.FindElement(By.Name("work")).GetAttribute("value");
+            string phoneFax = driver.FindElement(By.Name("fax")).GetAttribute("value");
             string email = driver.FindElement(By.Name("email")).GetAttribute("value");
             string email2 = driver.FindElement(By.Name("email2")).GetAttribute("value");
             string email3 = driver.FindElement(By.Name("email3")).GetAttribute("value");
+            string nickname = driver.FindElement(By.Name("nickname")).GetAttribute("value");
+            string bday = driver.FindElement(By.XPath("//select[@name=\"bday\"]/option[@selected=\"selected\"]")).GetAttribute("value");
+            string bmonth = driver.FindElement(By.XPath("//select[@name=\"bmonth\"]/option[@selected=\"selected\"]")).GetAttribute("value");
+            string byear = driver.FindElement(By.Name("byear")).GetAttribute("value");
+            string aday = driver.FindElement(By.XPath("//select[@name=\"aday\"]/option[@selected=\"selected\"]")).GetAttribute("value");
+            string amonth = driver.FindElement(By.XPath("//select[@name=\"amonth\"]/option[@selected=\"selected\"]")).Text;
+            string ayear = driver.FindElement(By.Name("ayear")).GetAttribute("value");
 
             return new ContactData(lastName, firstName)
             {
+                Middlename = middlename,
                 Address = address,
                 PhoneHome = phoneHome,
                 PhoneMobile = phoneMobile,
                 PhoneWork = phoneWork,
+                PhoneFax = phoneFax,
                 Email = email,
                 Email2 = email2,
                 Email3 = email3,
+                Nickname = nickname,
+                Bday = bday,
+                Bmonth = bmonth,
+                Byear = byear,
+                Aday = aday,
+                Amonth = amonth,
+                Ayear = ayear
             };
+        }
+        /// <summary>
+        /// Получаем данные о контакте на странице Details
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public ContactData GetContactDataFromDetailsPage(int v)
+        {
+            OpenContactDetails(v);
+            IWebElement detailsData = driver.FindElement(By.XPath("//*[@id='content']"));
+            return new ContactData()
+            {
+                DetailsData = detailsData.Text,
+            };    
         }
     }
 }

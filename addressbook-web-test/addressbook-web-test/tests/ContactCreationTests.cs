@@ -18,7 +18,12 @@ namespace WebAddressbookTests
             {
                 Nickname = "TestContact",
                 Email = "test@test.ru",
+                Email2 = "test2@test.ru",
+                Email3 = "test3@test.ru",
+                PhoneHome = "7 (852) 751-25-14",
                 PhoneMobile = "7 (852) 751-25-15",
+                PhoneWork= "7 (852) 751-25-16",
+                PhoneFax = "7 (852) 751-25-17",
                 Address = "Moscow, st.Mira 25, ap. 12",
                 Bday = "14",
                 Bmonth = "July",
