@@ -104,7 +104,7 @@ namespace WebAddressbookTests
                     string anniversary = $"{ Aday }. {Amonth} {Ayear}";
                     return
                         /* Для потомков
-                        $"{ Firstname } {Middlename} { Lastname }\r\n" +
+                        $"{ Firstname } { Middlename } { Lastname }\r\n" +
                         $"{ Nickname }\r\n" +
                         $"{ Address }\r\n\r\n" +
                         $"H: { PhoneHome }\r\n" +
@@ -195,7 +195,13 @@ namespace WebAddressbookTests
         }
         public override string ToString()
         {
-            return "Firstname = " + Firstname + "\n" + "Lastname = " + Lastname;
+            return $"\n" +
+                   $"Firstname = { Firstname }" +
+                   $"\n" +
+                   $"Middlename = { Middlename }" +
+                   $"\n" +
+                   $"Lastname = { Lastname }"
+                   ;
         }
         public int CompareTo(ContactData other)
         {

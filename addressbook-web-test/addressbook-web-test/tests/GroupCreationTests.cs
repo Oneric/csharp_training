@@ -10,37 +10,22 @@ namespace WebAddressbookTests
     [TestFixture]
     public class GroupCreationTests : GroupTestBase
     {
-        [Test]
-        public void CreateNewGroupTest()
+        public static IEnumerable<GroupData> RandomGroupDataProvider()
         {
-            GroupData group = new GroupData("Group name")
+            List<GroupData> groups = new List<GroupData>();
+            for (int i = 0; i < 5; i++)
             {
-                Header = "Group header",
-                Footer = "Group footer"
-            };
-
-            List<GroupData> beforeTest = app.Groups.GetGroupList();
-
-            app.Groups.Create(group);
-
-            Assert.AreEqual(beforeTest.Count + 1, app.Groups.GetGroupCount());
-
-            List<GroupData> afterTest = app.Groups.GetGroupList();
-            beforeTest.Add(group);
-
-            beforeTest.Sort();
-            afterTest.Sort();
-
-            Assert.AreEqual(beforeTest, afterTest);
+                groups.Add(new GroupData(GenerateRandomString(15))
+                {
+                    Header = GenerateRandomString(30),
+                    Footer = GenerateRandomString(30)
+                });
+            }
+            return groups;
         }
-        [Test]
-        public void CreateNewGroupWithEmptyFieldsTest()
+        [Test, TestCaseSource("RandomGroupDataProvider")]
+        public void CreateNewGroupTest(GroupData group)
         {
-            GroupData group = new GroupData("")
-            {
-                Header = "",
-                Footer = ""
-            };
             List<GroupData> beforeTest = app.Groups.GetGroupList();
 
             app.Groups.Create(group);
