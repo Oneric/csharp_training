@@ -95,42 +95,20 @@ namespace WebAddressbookTests
             {
                 if (detailsData != null)
                 {
-                    return CleanUpDeteils(detailsData).Trim();
+                    return detailsData;
                 }
                 else
-                {   
-                    
-                    string birthday = $"{ Bday }. {Bmonth} {Byear}";
-                    string anniversary = $"{ Aday }. {Amonth} {Ayear}";
+                {
                     return
-                        /* Для потомков
-                        $"{ Firstname } { Middlename } { Lastname }\r\n" +
-                        $"{ Nickname }\r\n" +
-                        $"{ Address }\r\n\r\n" +
-                        $"H: { PhoneHome }\r\n" +
-                        $"M: { PhoneMobile }\r\n" +
-                        $"W: { PhoneWork }\r\n" +
-                        $"F: { PhoneFax }\r\n\r\n" +
-                        $"{ Email }\r\n" +
-                        $"{ Email2 }\r\n" +
-                        $"{ Email3 }\r\n\r\n" +
-                        $"Birthday { birthday } ({ YearsDiff(birthday, "birthday") })\r\n" +
-                        $"Anniversary { anniversary } ({ YearsDiff(anniversary) })"
-                        ;*/(
-                        CleanUpDeteils(Firstname) +
-                        CleanUpDeteils(Middlename) +
-                        CleanUpDeteils(Lastname) +
-                        CleanUpDeteils(Nickname) +
-                        CleanUpDeteils(Address) +
-                        CleanUpDeteils(PhoneHome) +
-                        CleanUpDeteils(PhoneMobile) +
-                        CleanUpDeteils(PhoneWork) +
-                        CleanUpDeteils(PhoneFax) +
-                        CleanUpDeteils(Email) +
-                        CleanUpDeteils(Email2) +
-                        CleanUpDeteils(Email3) +
-                        CleanUpDeteils($"Birthday { birthday } ({ YearsDiff(birthday, "birthday") })") +
-                        CleanUpDeteils($"Anniversary { anniversary } ({ YearsDiff(anniversary) })")).Trim();
+                        DetailFIOFields(Firstname) +
+                        DetailFIOFields(Middlename) +
+                        DetailFIOFields(Lastname).Trim() +
+                        DetailFields(Nickname) +
+                        DetailFields(Address) +
+                        DetailPhonesFields(PhoneHome, PhoneMobile, PhoneWork, PhoneFax) +
+                        DetailEmailsFields(Email, Email2, Email3) +
+                        DetailBAFields("Birthday", Bday, Bmonth, Byear) +
+                        DetailBAFields("Anniversary", Aday, Amonth, Ayear).Trim();
                 }
             }
             set
@@ -138,33 +116,209 @@ namespace WebAddressbookTests
                 detailsData = value;
             }
         }
-        private string YearsDiff(string date, string type=null)
+        private string DayNorm(string value)
         {
-            if(date != null || date != ".  ")
+            if (Convert.ToInt32(value) < 10)
             {
-                string Now = DateTime.Now.ToString("dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
-                var dateNow = DateTime.ParseExact(Now, "dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
-                var dateShift = DateTime.ParseExact(date, "dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
-                var timeSpan = (dateNow - dateShift).Duration();
-                double days = timeSpan.Days;
-                if (type == "birthday")
-                {
-                    return Math.Floor(days / 365).ToString();
-                }
-                else
-                {
-                    return Math.Ceiling(days / 365).ToString();
-                }
+                return $"0{value}";
             }
-            return null;
+            else
+            {
+                return value;
+            }
         }
-        private string CleanUpDeteils(string value)
+        private string DetailPhonesFields(string home, string mobile, string work, string fax)
+        {
+            string phones = "\r\n\r\n";
+            if (home == null || home == "")
+            {
+                phones += $"";
+            }
+            else
+            {
+                phones += $"H: { home }\r\n";
+            } 
+            if (mobile == null || mobile == "")
+            {
+                phones += $"";
+            }
+            else
+            {
+                phones += $"M: { mobile }\r\n";
+            }
+            if (work == null || work == "")
+            {
+                phones += $"";
+            }
+            else
+            {
+                phones += $"W: { work }\r\n";
+            }
+            if (fax == null || fax == "")
+            {
+                phones += $"";
+            }
+            else
+            {
+                phones += $"F: { fax }";
+            }
+            if((home == null || home == "") && (mobile == null || mobile == "") && (work == null || work == "") && (fax == null || fax == ""))
+            {
+                return $"";
+            }
+            else
+            {
+                return phones;
+            }
+        }
+        private string DetailEmailsFields(string email, string email2, string email3)
+        {
+            string emails = "\r\n\r\n";
+            if (email == null || email == "")
+            {
+                emails += $"";
+            }
+            else
+            {
+                emails += $"{ email }\r\n";
+            }
+            if (email2 == null || email2 == "")
+            {
+                emails += $"";
+            }
+            else
+            {
+                emails += $"{ email2 }\r\n";
+            }
+            if (email3 == null || email3 == "")
+            {
+                emails += $"";
+            }
+            else
+            {
+                emails += $"{ email3 }";
+            }
+            if((email == null || email == "") && (email2 == null || email2 == "") && (email3 == null || email3 == ""))
+            {
+                return $"";
+            }
+            else
+            {
+                return emails;
+            }
+        }
+        private string DetailFIOFields(string value)
         {
             if (value == null || value == "")
             {
-                return "";
+                return $"";
             }
-            return Regex.Replace(value, "[\\^H:$\\^M:$\\^W:$\\^F:$ \\r\\n]", "");
+            else
+            {
+                return $"{ value } ";
+            }
+        }
+        private string DetailBAFields(string name, string day, string month, string year)
+        {
+            string date = $"";
+            if (day == null || day == "0")
+            {
+                date += $"".Trim();
+            }
+            else
+            {
+                date += $"{ day }.";
+            }
+            if (month == null || month == "-")
+            {
+                date += $"".Trim();
+            }
+            else
+            {
+                if(day == "0")
+                {
+                    date += $"{ month }";
+                }
+                else
+                {
+                    date += $" { month }";
+                }
+            }
+            if (year == null || year == "")
+            {
+                date += $"".Trim();
+            }
+            else
+            {
+                if(month != "-" || day != "0")
+                {
+                    date += $" { year }";
+                }
+                else
+                {
+                    date += $"{ year }";
+                }
+            }
+            if(year == null || year == "")
+            {
+                date += $"".Trim();
+            }
+            else if (day != "0" && month == "-")
+            {
+                date += $" ({ YearsDiff($"{ DayNorm(day) }. January { year }", name, true) })";
+            }
+            else if (day == "0" && month != "-")
+            {
+                date += $" ({ YearsDiff($"01. { month } { year }", name) })";
+            }
+            else if (day == "0" && month == "-")
+            {
+                date += $" ({ Convert.ToInt32(YearsDiff($"01. January { year }", name, true)) })";
+            }
+            else
+            {
+                date += $" ({ YearsDiff($"{ DayNorm(day) }. { month } { year }", name) })";
+            }
+            if (day == "0" && month == "-" && (year == "" || year == null))
+            {
+                return "".Trim();
+            }
+            else
+            {
+                return $"\r\n\r\n{ name } { date }\r\n";
+            }
+        }
+        private string DetailFields(string value)
+        {
+            if (value == null || value == "")
+            {
+                return $"".Trim();
+            }
+            else
+            {
+                return $"\r\n{ value }";
+            }
+        }
+        private string YearsDiff(string date, string type=null, bool forcefloor = false)
+        {
+            string now = DateTime.Now.ToString("dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
+            var dateNow = DateTime.ParseExact(now, "dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
+            var dateShift = DateTime.ParseExact(date, "dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
+            var timeSpan = (dateNow - dateShift).Duration();
+            double days = timeSpan.Days;
+
+            if (type == "Birthday" || forcefloor == true)
+            {
+                return Math.Floor(days / 365).ToString();
+            }
+            else if (type == "Anniversary")
+            {
+                return Math.Ceiling(days / 365).ToString();
+            }
+            else
+            {
+                return null;
+            }
         }
         private string CleanUp(string value)
         {
