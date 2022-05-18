@@ -100,20 +100,76 @@ namespace WebAddressbookTests
                 else
                 {
                     return
-                        DetailFIOFields(Firstname) +
-                        DetailFIOFields(Middlename) +
-                        DetailFIOFields(Lastname).Trim() +
+                        DetailFullNameBlock(Firstname, Middlename, Lastname) +
                         DetailFields(Nickname) +
                         DetailFields(Address) +
-                        DetailPhonesFields(PhoneHome, PhoneMobile, PhoneWork, PhoneFax) +
-                        DetailEmailsFields(Email, Email2, Email3) +
-                        DetailBAFields("Birthday", Bday, Bmonth, Byear) +
-                        DetailBAFields("Anniversary", Aday, Amonth, Ayear).Trim();
+                        DetailPhonesBlock(PhoneHome, PhoneMobile, PhoneWork, PhoneFax) +
+                        DetailEmailsBlock(Email, Email2, Email3) +
+                        DetailBirthDayAnniversaryBlock(
+                            DetailDateProcessing("Birthday", Bday, Bmonth, Byear),
+                            DetailDateProcessing("Anniversary", Aday, Amonth, Ayear));
                 }
             }
             set
             {
                 detailsData = value;
+            }
+        }
+        private string DetailFullNameBlock(string firstname, string middlename, string lastname)
+        {
+            string fullname = $"";
+
+            if (firstname == null || firstname == "")
+            {
+                fullname += $"";
+            }
+            else
+            {
+                fullname += $"{ firstname }";
+            }
+
+            if (middlename == null || middlename == "")
+            {
+                fullname += $"";
+            }
+            else
+            {
+                if (firstname == null || firstname == "")
+                {
+                    fullname += $"{ middlename }";
+                }
+                else
+                {
+                    fullname += $" { middlename }";
+                }
+            }
+
+            if (lastname == null || lastname == "")
+            {
+                fullname += $"";
+            }
+            else
+            {
+                if ((firstname == null || firstname == "") && (middlename == null || middlename == ""))
+                {
+                    fullname += $"{ lastname }";
+                }
+                else
+                {
+                    fullname += $" { lastname }";
+                }
+            }
+            return fullname;
+        }
+        private string DetailFields(string value)
+        {
+            if (value == null || value == "")
+            {
+                return $"";
+            }
+            else
+            {
+                return $"\r\n{ value }";
             }
         }
         private string DayNorm(string value)
@@ -127,16 +183,16 @@ namespace WebAddressbookTests
                 return value;
             }
         }
-        private string DetailPhonesFields(string home, string mobile, string work, string fax)
+        private string DetailPhonesBlock(string home, string mobile, string work, string fax)
         {
-            string phones = "\r\n\r\n";
+            string phones = "\r\n";
             if (home == null || home == "")
             {
                 phones += $"";
             }
             else
             {
-                phones += $"H: { home }\r\n";
+                phones += $"\r\nH: { home }";
             } 
             if (mobile == null || mobile == "")
             {
@@ -144,7 +200,7 @@ namespace WebAddressbookTests
             }
             else
             {
-                phones += $"M: { mobile }\r\n";
+                phones += $"\r\nM: { mobile }";
             }
             if (work == null || work == "")
             {
@@ -152,7 +208,7 @@ namespace WebAddressbookTests
             }
             else
             {
-                phones += $"W: { work }\r\n";
+                phones += $"\r\nW: { work }";
             }
             if (fax == null || fax == "")
             {
@@ -160,7 +216,7 @@ namespace WebAddressbookTests
             }
             else
             {
-                phones += $"F: { fax }";
+                phones += $"\r\nF: { fax }";
             }
             if((home == null || home == "") && (mobile == null || mobile == "") && (work == null || work == "") && (fax == null || fax == ""))
             {
@@ -171,16 +227,16 @@ namespace WebAddressbookTests
                 return phones;
             }
         }
-        private string DetailEmailsFields(string email, string email2, string email3)
+        private string DetailEmailsBlock(string email, string email2, string email3)
         {
-            string emails = "\r\n\r\n";
+            string emails = "\r\n";
             if (email == null || email == "")
             {
                 emails += $"";
             }
             else
             {
-                emails += $"{ email }\r\n";
+                emails += $"\r\n{ email }";
             }
             if (email2 == null || email2 == "")
             {
@@ -188,7 +244,7 @@ namespace WebAddressbookTests
             }
             else
             {
-                emails += $"{ email2 }\r\n";
+                emails += $"\r\n{ email2 }";
             }
             if (email3 == null || email3 == "")
             {
@@ -196,7 +252,7 @@ namespace WebAddressbookTests
             }
             else
             {
-                emails += $"{ email3 }";
+                emails += $"\r\n{ email3 }";
             }
             if((email == null || email == "") && (email2 == null || email2 == "") && (email3 == null || email3 == ""))
             {
@@ -207,23 +263,13 @@ namespace WebAddressbookTests
                 return emails;
             }
         }
-        private string DetailFIOFields(string value)
-        {
-            if (value == null || value == "")
-            {
-                return $"";
-            }
-            else
-            {
-                return $"{ value } ";
-            }
-        }
-        private string DetailBAFields(string name, string day, string month, string year)
+
+        private string DetailDateProcessing(string name, string day, string month, string year)
         {
             string date = $"";
             if (day == null || day == "0")
             {
-                date += $"".Trim();
+                date += $"";
             }
             else
             {
@@ -231,7 +277,7 @@ namespace WebAddressbookTests
             }
             if (month == null || month == "-")
             {
-                date += $"".Trim();
+                date += $"";
             }
             else
             {
@@ -246,7 +292,7 @@ namespace WebAddressbookTests
             }
             if (year == null || year == "")
             {
-                date += $"".Trim();
+                date += $"";
             }
             else
             {
@@ -261,7 +307,7 @@ namespace WebAddressbookTests
             }
             if(year == null || year == "")
             {
-                date += $"".Trim();
+                date += $"";
             }
             else if (day != "0" && month == "-")
             {
@@ -281,24 +327,43 @@ namespace WebAddressbookTests
             }
             if (day == "0" && month == "-" && (year == "" || year == null))
             {
-                return "".Trim();
+                return $"";
             }
             else
             {
-                return $"\r\n\r\n{ name } { date }\r\n";
+                return $"\r\n{ name } { date }";
             }
         }
-        private string DetailFields(string value)
+        private string DetailBirthDayAnniversaryBlock(string birthday, string annyversary)
         {
-            if (value == null || value == "")
+            string block = $"\r\n";
+            if(birthday == "" && annyversary == "")
             {
-                return $"".Trim();
+                block = $"";
             }
             else
             {
-                return $"\r\n{ value }";
+                if (birthday == "")
+                {
+                    block += $"";
+                }
+                else
+                {
+                    block += birthday;
+                }
+                if (annyversary == "")
+                {
+                    block += $"";
+                }
+                else
+                {
+                    block += annyversary;
+                }
             }
+            return block;
         }
+
+
         private string YearsDiff(string date, string type=null, bool forcefloor = false)
         {
             string now = DateTime.Now.ToString("dd. MMMM yyyy", CultureInfo.CreateSpecificCulture("en-US"));
