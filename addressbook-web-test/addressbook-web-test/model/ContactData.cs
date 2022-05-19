@@ -101,8 +101,8 @@ namespace WebAddressbookTests
                 {
                     return
                         DetailFullNameBlock(Firstname, Middlename, Lastname) +
-                        DetailFields(Nickname) +
-                        DetailFields(Address) +
+                        DetailFields(DetailFullNameBlock(Firstname, Middlename, Lastname), Nickname) +
+                        DetailFields(Nickname, Address) +
                         DetailPhonesBlock(PhoneHome, PhoneMobile, PhoneWork, PhoneFax) +
                         DetailEmailsBlock(Email, Email2, Email3) +
                         DetailBirthDayAnniversaryBlock(
@@ -113,6 +113,26 @@ namespace WebAddressbookTests
             set
             {
                 detailsData = value;
+            }
+        }
+        private string DetailFields(string beforefield, string value)
+        {
+
+            if (value == null || value == "")
+            {
+                return $"";
+            }
+            else
+            {
+                if (beforefield == null || beforefield == "")
+                {
+                    return $"{ value }";
+                }
+                else
+                {
+                    return $"\r\n{ value }";
+                }
+
             }
         }
         private string DetailFullNameBlock(string firstname, string middlename, string lastname)
@@ -160,17 +180,6 @@ namespace WebAddressbookTests
                 }
             }
             return fullname;
-        }
-        private string DetailFields(string value)
-        {
-            if (value == null || value == "")
-            {
-                return $"";
-            }
-            else
-            {
-                return $"\r\n{ value }";
-            }
         }
         private string DayNorm(string value)
         {
