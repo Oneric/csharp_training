@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -24,7 +26,7 @@ namespace WebAddressbookTests
             }
             return groups;
         }
-        public static IEnumerable<GroupData> RandomGroupDataFromFile()
+        public static IEnumerable<GroupData> RandomGroupDataFromCSVFile()
         {
             List<GroupData> groups = new List<GroupData>();
             string[] lines = File.ReadAllLines(@"groups.csv");
@@ -39,9 +41,12 @@ namespace WebAddressbookTests
             }
             return groups;
         }
+        public static IEnumerable<GroupData> RandomGroupDataFromXMLFile()
+        {
+            return (List<GroupData>) new XmlSerializer(typeof(List<GroupData>)).Deserialize(new StreamReader(@"groups.xml"));
+        }
 
-
-        [Test, TestCaseSource("RandomGroupDataFromFile")]
+        [Test, TestCaseSource("RandomGroupDataFromXMLFile")]
         public void CreateNewGroupTest(GroupData group)
         {
             List<GroupData> beforeTest = app.Groups.GetGroupList();
