@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Collections.Generic;
+using Excel = Microsoft.Office.Interop.Excel;
 using NUnit.Framework;
 
 namespace WebAddressbookTests
@@ -51,7 +52,29 @@ namespace WebAddressbookTests
 
             return JsonConvert.DeserializeObject<List<GroupData>>(File.ReadAllText(@"groups.json"));
         }
-        [Test, TestCaseSource("ReadGroupDataFromJSONFile")]
+        public static IEnumerable<GroupData> ReadGroupDataFromExcelFile()
+        {
+            List<GroupData> groups = new List<GroupData>();
+            Excel.Application app = new Excel.Application();
+            Excel.Workbook wb = app.Workbooks.Open(Path.Combine(Directory.GetCurrentDirectory(), @"groups.xlsx"));
+            Excel.Worksheet sheet = wb.ActiveSheet;
+
+            Excel.Range range = sheet.UsedRange;
+            for (int i = 2; i <= range.Rows.Count; i++)
+            {
+                groups.Add(new GroupData()
+                {
+                    Name = range.Cells[i, 1].Value,
+                    Header = range.Cells[i, 2].Value,
+                    Footer = range.Cells[i, 3].Value
+                });
+            }
+            wb.Close();
+            app.Quit();
+
+            return groups;
+        }
+        [Test, TestCaseSource("ReadGroupDataFromExcelFile")]
         public void CreateNewGroupTest(GroupData group)
         {
             List<GroupData> beforeTest = app.Groups.GetGroupList();
