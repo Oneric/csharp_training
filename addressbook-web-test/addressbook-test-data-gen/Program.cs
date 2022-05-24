@@ -55,11 +55,11 @@ namespace addressbook_test_data_gen
                     }
                     else if (format.ToLower() == "xml")
                     {
-                        WriteContactsToFileXML(contacts, stream);
+                        WriteToFileXML(contacts, stream);
                     }
                     else if (format.ToLower() == "json")
                     {
-                        WriteContactsToFileJSON(contacts, stream);
+                        WriteToFileJSON(contacts, stream);
                     }
                     else
                     {
@@ -91,11 +91,11 @@ namespace addressbook_test_data_gen
                     }
                     else if (format.ToLower() == "xml")
                     {
-                        WriteGroupsToFileXML(groups, stream);
+                        WriteToFileXML(groups, stream);
                     }
                     else if (format.ToLower() == "json")
                     {
-                        WriteGroupsToFileJSON(groups, stream);
+                        WriteToFileJSON(groups, stream);
                     }
                     else
                     {
@@ -105,7 +105,73 @@ namespace addressbook_test_data_gen
                 }
             }
         }
+        static void WriteGroupsToFileCSV(List<GroupData> groups, StreamWriter stream)
+        {
+            try
+            {
+                foreach (GroupData group in groups)
+                {
+                    stream.WriteLine($"{group.Name},{group.Header},{group.Footer}");
+                }
+                Console.Out.WriteLine($"Файл успешно создан.");
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
+            }
 
+        }
+        static void WriteContactsToFileCSV(List<ContactData> contacts, StreamWriter stream)
+        {
+            try
+            {
+                foreach (ContactData contact in contacts)
+                {
+                    stream.WriteLine($"{contact.Firstname}," +
+                        $"{contact.Middlename}," +
+                        $"{contact.Lastname}," +
+                        $"{contact.Nickname}," +
+                        $"{contact.Address}," +
+                        $"{contact.PhoneHome}," +
+                        $"{contact.PhoneMobile}," +
+                        $"{contact.PhoneWork}," +
+                        $"{contact.PhoneFax}," +
+                        $"{contact.Email}," +
+                        $"{contact.Email2}," +
+                        $"{contact.Email3}");
+                }
+                Console.Out.WriteLine($"Файл успешно создан.");
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
+            }
+
+        }
+        static void WriteToFileXML<T>(List<T> data, StreamWriter stream) where T : class
+        {
+            try
+            {
+                new XmlSerializer(typeof(List<T>)).Serialize(stream, data);
+                Console.Out.WriteLine($"Файл успешно создан.");
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
+            }
+        }
+        static void WriteToFileJSON<T>(List<T> data, StreamWriter stream) where T : class
+        {
+            try
+            {
+                stream.Write(JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented));
+                Console.Out.WriteLine($"Файл успешно создан.");
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
+            }
+        }
         static void WriteGroupsToFileXLS(List<GroupData> groups, string outputFile)
         {
             try
@@ -125,14 +191,14 @@ namespace addressbook_test_data_gen
                     sheet.Cells[row, 1] = group.Name;
                     sheet.Cells[row, 2] = group.Header;
                     sheet.Cells[row, 3] = group.Footer;
-                    
+
                     row++;
                 }
 
                 string fullPath = Path.Combine(Directory.GetCurrentDirectory(), outputFile);
                 if (File.Exists(fullPath))
                 {
-                    
+
                     Console.Out.WriteLine($"Delete File on: { fullPath }");
                     File.Delete(fullPath);
                     Console.Out.WriteLine($"Save File to: { fullPath }");
@@ -156,46 +222,6 @@ namespace addressbook_test_data_gen
                     $"\r\n{ex.Message}" +
                     $"\r\nTrace:" +
                     $"\r\n{ex.StackTrace}");
-            }
-        }
-        static void WriteGroupsToFileCSV(List<GroupData> groups, StreamWriter stream)
-        {
-            try
-            {
-                foreach (GroupData group in groups)
-                {
-                    stream.WriteLine($"{group.Name},{group.Header},{group.Footer}");
-                }
-                Console.Out.WriteLine($"Файл успешно создан.");
-            }
-            catch (Exception ex)
-            {
-                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
-            }
-
-        }
-        static void WriteGroupsToFileXML(List<GroupData> groups, StreamWriter stream)
-        {
-            try
-            {
-                new XmlSerializer(typeof(List<GroupData>)).Serialize(stream, groups);
-                Console.Out.WriteLine($"Файл успешно создан.");
-            }
-            catch (Exception ex)
-            {
-                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
-            }
-        }
-        static void WriteGroupsToFileJSON(List<GroupData> groups, StreamWriter stream)
-        {
-            try
-            {
-                stream.Write(JsonConvert.SerializeObject(groups, Newtonsoft.Json.Formatting.Indented));
-                Console.Out.WriteLine($"Файл успешно создан.");
-            }
-            catch (Exception ex)
-            {
-                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
             }
         }
         static void WriteContactsToFileXLS(List<ContactData> contacts, string outputFile)
@@ -265,57 +291,6 @@ namespace addressbook_test_data_gen
                     $"\r\n{ex.Message}" +
                     $"\r\nTrace:" +
                     $"\r\n{ex.StackTrace}");
-            }
-        }
-        static void WriteContactsToFileCSV(List<ContactData> contacts, StreamWriter stream)
-        {
-            try
-            {
-                foreach (ContactData contact in contacts)
-                {
-                    stream.WriteLine($"{contact.Firstname}," +
-                        $"{contact.Middlename}," +
-                        $"{contact.Lastname}," +
-                        $"{contact.Nickname}," +
-                        $"{contact.Address}," +
-                        $"{contact.PhoneHome}," +
-                        $"{contact.PhoneMobile}," +
-                        $"{contact.PhoneWork}," +
-                        $"{contact.PhoneFax}," +
-                        $"{contact.Email}," +
-                        $"{contact.Email2}," +
-                        $"{contact.Email3}");
-                }
-                Console.Out.WriteLine($"Файл успешно создан.");
-            }
-            catch (Exception ex)
-            {
-                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
-            }
-
-        }
-        static void WriteContactsToFileXML(List<ContactData> contacts, StreamWriter stream)
-        {
-            try
-            {
-                new XmlSerializer(typeof(List<ContactData>)).Serialize(stream, contacts);
-                Console.Out.WriteLine($"Файл успешно создан.");
-            }
-            catch (Exception ex)
-            {
-                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
-            }
-        }
-        static void WriteContactsToFileJSON(List<ContactData> contacts, StreamWriter stream)
-        {
-            try
-            {
-                stream.Write(JsonConvert.SerializeObject(contacts, Newtonsoft.Json.Formatting.Indented));
-                Console.Out.WriteLine($"Файл успешно создан.");
-            }
-            catch (Exception ex)
-            {
-                Console.Out.WriteLine($"При создании файла произошла ошибка: \r\n{ex.Message}");
             }
         }
     }
