@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LinqToDB.Mapping;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
@@ -8,6 +9,7 @@ using System.Globalization;
 
 namespace WebAddressbookTests
 {
+    [Table(Name = "addressbook")]
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
         private string phoneAll = null;
@@ -26,32 +28,58 @@ namespace WebAddressbookTests
             Middlename = middlename;
             Lastname = lastname;
         }
+        [Column(Name = "id"), PrimaryKey, Identity]
         public string Id { get; set; }
+        [Column(Name = "firstname")]
         public string Firstname { get; set; }
+        [Column(Name = "middlename")]
         public string Middlename { get; set; } = null;
+        [Column(Name = "lastname")]
         public string Lastname { get; set; }
+        [Column(Name = "nickname")]
         public string Nickname { get; set; } = null;
+        [Column(Name = "photo")]
         public string Photo { get; set; } = null;
+        [Column(Name = "title")]
         public string Title { get; set; } = null;
+        [Column(Name = "company")]
         public string Company { get; set; } = null;
+        [Column(Name = "address")]
         public string Address { get; set; } = null;
+        [Column(Name = "home")]
         public string PhoneHome { get; set; } = null;
+        [Column(Name = "mobile")]
         public string PhoneMobile { get; set; } = null;
+        [Column(Name = "work")]
         public string PhoneWork { get; set; } = null;
+        [Column(Name = "fax")]
         public string PhoneFax { get; set; } = null;
+        [Column(Name = "email")]
         public string Email { get; set; } = null;
+        [Column(Name = "email2")]
         public string Email2 { get; set; } = null;
+        [Column(Name = "email3")]
         public string Email3 { get; set; } = null;
+        [Column(Name = "homepage")]
         public string Homepage { get; set; } = null;
+        [Column(Name = "bday")]
         public string Bday { get; set; } = null;
+        [Column(Name = "bmonth")]
         public string Bmonth { get; set; } = null;
+        [Column(Name = "byear")]
         public string Byear { get; set; } = null;
+        [Column(Name = "aday")]
         public string Aday { get; set; } = null;
+        [Column(Name = "amonth")]
         public string Amonth { get; set; } = null;
+        [Column(Name = "ayear")]
         public string Ayear { get; set; } = null;
         public string NewGroup { get; set; } = null;
+        [Column(Name = "address2")]
         public string Address2 { get; set; } = null;
+        [Column(Name = "phone2")]
         public string Phone2 { get; set; } = null;
+        [Column(Name = "notes")]
         public string Notes { get; set; } = null;
         public string EmailAll 
         {
@@ -438,6 +466,13 @@ namespace WebAddressbookTests
                 return 1;
             }
             return Firstname.CompareTo(other.Firstname) != 0 ? Firstname.CompareTo(other.Firstname) : Lastname.CompareTo(other.Lastname);
+        }
+        public static List<ContactData> GetAll()
+        {
+            using (AddressbookDB db = new AddressbookDB())
+            {
+                return (from c in db.Contacts select c).ToList();
+            }
         }
     }
 }

@@ -24,14 +24,14 @@ namespace WebAddressbookTests
                 app.Groups.Create(new GroupData("New Group"));
             }
 
-            List<GroupData> beforeTest = app.Groups.GetGroupList();
+            List<GroupData> beforeTest = GroupData.GetAll();
             GroupData toBeModified = beforeTest[0];
 
-            app.Groups.Modify(0, modifiedData);
+            app.Groups.Modify(toBeModified, modifiedData);
 
             Assert.AreEqual(beforeTest.Count, app.Groups.GetGroupCount());
 
-            List<GroupData> afterTest = app.Groups.GetGroupList();
+            List<GroupData> afterTest = GroupData.GetAll();
             beforeTest[0].Name = modifiedData.Name;
 
             beforeTest.Sort();

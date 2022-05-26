@@ -19,14 +19,14 @@ namespace WebAddressbookTests
                 app.Contacts.Create(new ContactData("New", "For", "Delete"));
             }
 
-            List<ContactData> beforeTest = app.Contacts.GetContactList();
+            List<ContactData> beforeTest = ContactData.GetAll();
             ContactData toBeRemoved = beforeTest[0];
 
-            app.Contacts.Remove(0);
+            app.Contacts.Remove(toBeRemoved);
 
             Assert.AreEqual(beforeTest.Count - 1, app.Contacts.GetContactCount());
 
-            List<ContactData> afterTest = app.Contacts.GetContactList();
+            List<ContactData> afterTest = ContactData.GetAll();
 
             beforeTest.RemoveAt(0);
 

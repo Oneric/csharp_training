@@ -43,6 +43,22 @@ namespace WebAddressbookTests
             return this;
         }
         /// <summary>
+        /// Набор шагов для изменения группы group.Id
+        /// </summary>
+        /// <param name="group">Объект класса GroupData</param>
+        /// <param name="modyfiedGroup">Объект класса GroupData c данными для изменения группы</param>
+        /// <returns></returns>
+        public GroupHelper Modify(GroupData group, GroupData modyfiedGroup)
+        {
+            SelectGroup(group.Id);
+            InitModifySelectedGroup();
+            FillGroupForm(modyfiedGroup);
+            SubmitGroupModify();
+            ReturnToGroupsPage();
+
+            return this;
+        }
+        /// <summary>
         /// Набор шагов для удаления группы с индексом v
         /// </summary>
         /// <param name="v">Индекс</param>
@@ -50,6 +66,19 @@ namespace WebAddressbookTests
         public GroupHelper Remove(int v)
         {
             SelectGroup(v);
+            RemoveSelectedGroups();
+            ReturnToGroupsPage();
+
+            return this;
+        }
+        /// <summary>
+        /// Набор шагов для удаления группы group.Id
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public GroupHelper Remove(GroupData group)
+        {
+            SelectGroup(group.Id);
             RemoveSelectedGroups();
             ReturnToGroupsPage();
 
@@ -127,6 +156,17 @@ namespace WebAddressbookTests
         public GroupHelper SelectGroup(int v)
         {
             driver.FindElement(By.XPath("//span[@class=\"group\"][" + (v + 1) + "]/input")).Click();
+
+            return this;
+        }
+        /// <summary>
+        /// Активируем чекбокс группы с индексом Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public GroupHelper SelectGroup(String id)
+        {
+            driver.FindElement(By.XPath("//span[@class=\"group\"]/input[@value=\"" + id + "\"]")).Click();
 
             return this;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -77,13 +78,13 @@ namespace WebAddressbookTests
         [Test, TestCaseSource("ReadGroupDataFromExcelFile")]
         public void CreateNewGroupTest(GroupData group)
         {
-            List<GroupData> beforeTest = app.Groups.GetGroupList();
+            List<GroupData> beforeTest = GroupData.GetAll();
 
             app.Groups.Create(group);
 
             Assert.AreEqual(beforeTest.Count + 1, app.Groups.GetGroupCount());
 
-            List<GroupData> afterTest = app.Groups.GetGroupList();
+            List<GroupData> afterTest = GroupData.GetAll();
             beforeTest.Add(group);
 
             beforeTest.Sort();
@@ -92,26 +93,49 @@ namespace WebAddressbookTests
             Assert.AreEqual(beforeTest, afterTest);
         }
         [Test]
-        public void CreateNewGroupWithBadNameTest()
+        public void CreateNewGroupWithValidData()
         {
-            GroupData group = new GroupData("a'a")
+            GroupData group = new GroupData("Test group name")
             {
-                Header = "",
-                Footer = ""
+                Header = "Test group header",
+                Footer = "Test group footer"
             };
-            List<GroupData> beforeTest = app.Groups.GetGroupList();
+            List<GroupData> beforeTest = GroupData.GetAll();
 
             app.Groups.Create(group);
 
             Assert.AreEqual(beforeTest.Count + 1, app.Groups.GetGroupCount());
 
-            List<GroupData> afterTest = app.Groups.GetGroupList();
+            List<GroupData> afterTest = GroupData.GetAll();
             beforeTest.Add(group);
 
             beforeTest.Sort();
             afterTest.Sort();
 
             Assert.AreEqual(beforeTest, afterTest);
+        }
+        [Test]
+        public void TestDbConnectivity()
+        {
+            DateTime start = DateTime.Now;
+            List<GroupData> fromUi = app.Groups.GetGroupList();
+            DateTime end = DateTime.Now;
+            double fUiTime = end.Subtract(start).TotalMilliseconds;
+            Console.Out.WriteLine($"fromUi: {fUiTime}");
+
+            start = DateTime.Now;
+            List<GroupData> fromDb = GroupData.GetAll();
+            end = DateTime.Now;
+            double fDbTime = end.Subtract(start).TotalMilliseconds;
+            Console.Out.WriteLine($"fromDb: {fDbTime}");
+            if(fDbTime < fUiTime)
+            {
+                Console.Out.WriteLine($"Database faster");
+            }
+            else
+            {
+                Console.Out.WriteLine($"Selenium faster");
+            }
         }
     }
 }

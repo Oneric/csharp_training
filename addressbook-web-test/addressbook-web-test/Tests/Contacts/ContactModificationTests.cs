@@ -31,14 +31,14 @@ namespace WebAddressbookTests
                 app.Contacts.Create(new ContactData("New1", "Never1", "Newerr1"));
             }
 
-            List<ContactData> beforeTest = app.Contacts.GetContactList();
+            List<ContactData> beforeTest = ContactData.GetAll();
             ContactData toBeModified = beforeTest[0];
 
-            app.Contacts.Modify(0, modifiedContact);
+            app.Contacts.Modify(toBeModified, modifiedContact);
 
             Assert.AreEqual(beforeTest.Count, app.Contacts.GetContactCount());
 
-            List<ContactData> afterTest = app.Contacts.GetContactList();
+            List<ContactData> afterTest = ContactData.GetAll();
 
             beforeTest[0].Firstname = modifiedContact.Firstname;
             beforeTest[0].Lastname = modifiedContact.Lastname;

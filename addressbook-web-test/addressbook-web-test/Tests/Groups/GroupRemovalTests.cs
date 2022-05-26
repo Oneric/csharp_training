@@ -18,14 +18,14 @@ namespace WebAddressbookTests
                 app.Groups.Create(new GroupData("Removing group"));
             }
 
-            List<GroupData> beforeTest = app.Groups.GetGroupList();
+            List<GroupData> beforeTest = GroupData.GetAll();
             GroupData toBeRemoved = beforeTest[0];
 
-            app.Groups.Remove(0);
+            app.Groups.Remove(toBeRemoved);
 
             Assert.AreEqual(beforeTest.Count - 1, app.Groups.GetGroupCount());
 
-            List<GroupData> afterTest = app.Groups.GetGroupList();
+            List<GroupData> afterTest = GroupData.GetAll();
 
             beforeTest.RemoveAt(0);
             Assert.AreEqual(beforeTest, afterTest);

@@ -45,6 +45,21 @@ namespace WebAddressbookTests
             return this;
         }
         /// <summary>
+        /// Набор шагов для изменения контакта
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <param name="modyfiedContact"></param>
+        /// <returns></returns>
+        public ContactHelper Modify(ContactData contact, ContactData modyfiedContact)
+        {
+            InitContactModification(contact.Id);
+            FillContactForm(modyfiedContact);
+            SubmitContactModification();
+            ReturnToHomePage();
+
+            return this;
+        }
+        /// <summary>
         /// Набор шагов для удаления контакта
         /// </summary>
         /// <param name="v">Индекс контакта для удаления</param>
@@ -52,6 +67,21 @@ namespace WebAddressbookTests
         public ContactHelper Remove(int v)
         {
             SelectContact(v);
+            RemoveSelectedContacts();
+            acceptNextAlert = true;
+            CloseAlertAndGetItsText();
+            ReturnToHomePage();
+
+            return this;
+        }
+        /// <summary>
+        /// Набор шагов для удаления контакта
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns></returns>
+        public ContactHelper Remove(ContactData contact)
+        {
+            SelectContact(contact.Id);
             RemoveSelectedContacts();
             acceptNextAlert = true;
             CloseAlertAndGetItsText();
@@ -125,6 +155,16 @@ namespace WebAddressbookTests
             return this;
         }
         /// <summary>
+        /// Инициирует процесс модификации записи с указанным индексом
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ContactHelper InitContactModification(String id)
+        {
+            driver.FindElement(By.XPath($"//tr[@name=\"entry\"]//input[@id=\"{ id }\"]/../..//img[@title=\"Edit\"]")).Click();
+            return this;
+        }
+        /// <summary>
         /// Открывает страниццу детальной информации о контакте с индексом v
         /// </summary>
         /// <param name="v">Индекс записи</param>
@@ -153,6 +193,17 @@ namespace WebAddressbookTests
         public ContactHelper SelectContact(int v)
         {
             driver.FindElement(By.XPath($"//tr[@name=\"entry\"][{ v + 1 }]//input[@type=\"checkbox\"]")).Click();
+
+            return this;
+        }
+        /// <summary>
+        /// Активируем чекбокс контакта с индексом
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ContactHelper SelectContact(String id)
+        {
+            driver.FindElement(By.XPath($"//tr[@name=\"entry\"]//input[@id=\"{ id }\"]")).Click();
 
             return this;
         }

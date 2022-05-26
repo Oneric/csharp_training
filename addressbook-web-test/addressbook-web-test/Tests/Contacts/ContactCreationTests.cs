@@ -97,13 +97,13 @@ namespace WebAddressbookTests
         [Test, TestCaseSource("ReadContactDataFromJSONFile")]
         public void ContactCreationTest(ContactData contact)
         {
-            List<ContactData> beforeTest = app.Contacts.GetContactList();
+            List<ContactData> beforeTest = ContactData.GetAll();
 
             app.Contacts.Create(contact);
 
             Assert.AreEqual(beforeTest.Count + 1, app.Contacts.GetContactCount());
 
-            List<ContactData> afterTest = app.Contacts.GetContactList();
+            List<ContactData> afterTest = ContactData.GetAll();
             beforeTest.Add(contact);
 
             beforeTest.Sort();
@@ -124,13 +124,13 @@ namespace WebAddressbookTests
                 Bmonth = "July",
                 Byear = "1988",
             };
-            List<ContactData> beforeTest = app.Contacts.GetContactList();
+            List<ContactData> beforeTest = ContactData.GetAll();
 
             app.Contacts.Create(contact);
 
             Assert.AreEqual(beforeTest.Count + 1, app.Contacts.GetContactCount());
 
-            List<ContactData> afterTest = app.Contacts.GetContactList();
+            List<ContactData> afterTest = ContactData.GetAll();
             beforeTest.Add(contact);
 
             beforeTest.Sort();
@@ -151,13 +151,13 @@ namespace WebAddressbookTests
                 Bmonth = "July",
                 Byear = "1988",
             };
-            List<ContactData> beforeTest = app.Contacts.GetContactList();
+            List<ContactData> beforeTest = ContactData.GetAll();
 
             app.Contacts.Create(contact);
 
             Assert.AreEqual(beforeTest.Count + 1, app.Contacts.GetContactCount());
 
-            List<ContactData> afterTest = app.Contacts.GetContactList();
+            List<ContactData> afterTest = ContactData.GetAll();
             beforeTest.Add(contact);
 
             beforeTest.Sort();
