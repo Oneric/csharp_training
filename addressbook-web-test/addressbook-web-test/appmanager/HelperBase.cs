@@ -70,6 +70,19 @@ namespace WebAddressbookTests
                 new SelectElement(driver.FindElement(locator)).SelectByText(select);
             }
         }
+        /// <summary>
+        /// Обработка элементов селекта
+        /// </summary>
+        /// <param name="locator">Локатор</param>
+        /// <param name="value">параметр атрибута value</param>
+        public void SetSelectByValue(By locator, string value)
+        {
+            if (value != null)
+            {
+                driver.FindElement(locator).Click();
+                new SelectElement(driver.FindElement(locator)).SelectByValue(value);
+            }
+        }
         public string CloseAlertAndGetItsText()
         {
             try

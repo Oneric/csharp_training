@@ -118,13 +118,13 @@ namespace WebAddressbookTests
         public void TestDbConnectivity()
         {
             DateTime start = DateTime.Now;
-            List<GroupData> fromUi = app.Groups.GetGroupList();
+            List<GroupData> fromDb = GroupData.GetAll();
             DateTime end = DateTime.Now;
             double fUiTime = end.Subtract(start).TotalMilliseconds;
             Console.Out.WriteLine($"fromUi: {fUiTime}");
 
             start = DateTime.Now;
-            List<GroupData> fromDb = GroupData.GetAll();
+            List<GroupData> fromUi = app.Groups.GetGroupList();
             end = DateTime.Now;
             double fDbTime = end.Subtract(start).TotalMilliseconds;
             Console.Out.WriteLine($"fromDb: {fDbTime}");
@@ -135,6 +135,14 @@ namespace WebAddressbookTests
             else
             {
                 Console.Out.WriteLine($"Selenium faster");
+            }
+        }
+        [Test]
+        public void TestGCR()
+        {
+            foreach(ContactData contact in GroupData.GetAll()[0].GetContacts())
+            {
+                Console.Out.WriteLine(contact);
             }
         }
     }

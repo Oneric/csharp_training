@@ -81,6 +81,8 @@ namespace WebAddressbookTests
         public string Phone2 { get; set; } = null;
         [Column(Name = "notes")]
         public string Notes { get; set; } = null;
+        [Column(Name = "deprecated")]
+        public string Deprecated { get; set; } = null;
         public string EmailAll 
         {
             get
@@ -471,7 +473,7 @@ namespace WebAddressbookTests
         {
             using (AddressbookDB db = new AddressbookDB())
             {
-                return (from c in db.Contacts select c).ToList();
+                return (from c in db.Contacts.Where(x => x.Deprecated == "0000-00-00 00:00:00") select c).ToList();
             }
         }
     }

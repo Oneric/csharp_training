@@ -90,6 +90,60 @@ namespace WebAddressbookTests
             return this;
         }
         /// <summary>
+        /// Набор шагов для добавления контакта в группу
+        /// </summary>
+        /// <param name="contact">Объект класса ContactData</param>
+        /// <param name="group">Объект класса CroupData</param>
+        /// <returns></returns>
+        public ContactHelper AddContactToGroup(ContactData contact, GroupData group)
+        {
+            SetSelectByText(By.Name("group"), "[all]");
+            SelectContact(contact.Id);
+            SetSelectByValue(By.Name("to_group"), group.Id);
+            CommitAddingContactToGroup();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+            manager.Navigation.GoToHomePage();
+
+            return this;
+        }
+        /// <summary>
+        /// Набор шагов для удаления контакта из группы
+        /// </summary>
+        /// <param name="contact">Объект класса ContactData</param>
+        /// <param name="group">Объект класса CroupData</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public ContactHelper RemoveFromGroup(ContactData contact, GroupData group)
+        {
+            SetSelectByValue(By.Name("group"), group.Id);
+            SelectContact(contact.Id);
+            ClickRemoveFromGroupButton();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+            manager.Navigation.GoToHomePage();
+            return this;
+        }
+        /// <summary>
+        /// Нажать кнопку Remove from
+        /// </summary>
+        /// <returns></returns>
+        public ContactHelper ClickRemoveFromGroupButton()
+        {
+            driver.FindElement(By.Name("remove")).Click();
+
+            return this;
+        }
+        /// <summary>
+        /// Нажать кнопку Add to
+        /// </summary>
+        /// <returns></returns>
+        public ContactHelper CommitAddingContactToGroup()
+        {
+            driver.FindElement(By.Name("add")).Click();
+
+            return this;
+        }
+        /// <summary>
         /// Заполняем форму контакта
         /// </summary>
         /// <param name="contact">Объект класса ContactData</param>
@@ -161,7 +215,7 @@ namespace WebAddressbookTests
         /// <returns></returns>
         public ContactHelper InitContactModification(String id)
         {
-            driver.FindElement(By.XPath($"//tr[@name=\"entry\"]//input[@id=\"{ id }\"]/../..//img[@title=\"Edit\"]")).Click();
+            driver.FindElement(By.XPath($"//a[@href=\"edit.php?id={ id }\"]//img")).Click();
             return this;
         }
         /// <summary>
