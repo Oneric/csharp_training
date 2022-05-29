@@ -26,10 +26,10 @@ namespace WebAddressbookTests
 
             Assert.AreEqual(oldList, newList);
 
-            /*foreach (ContactData c in newList)
+            foreach (ContactData c in newList)
             {
                 Assert.AreNotEqual(c.Id, contact.Id);
-            }*/
+            }
         }
     }
 }
