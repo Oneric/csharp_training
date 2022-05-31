@@ -28,6 +28,9 @@ namespace WebAddressbookTests
             List<GroupData> afterTest = GroupData.GetAll();
 
             beforeTest.RemoveAt(0);
+            beforeTest.Sort();
+            afterTest.Sort();
+
             Assert.AreEqual(beforeTest, afterTest);
 
             foreach (GroupData group in afterTest)

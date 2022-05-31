@@ -29,6 +29,8 @@ namespace WebAddressbookTests
             List<ContactData> afterTest = ContactData.GetAll();
 
             beforeTest.RemoveAt(0);
+            beforeTest.Sort();
+            afterTest.Sort();
 
             Assert.AreEqual(beforeTest, afterTest);
 
