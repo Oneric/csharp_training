@@ -476,5 +476,16 @@ namespace WebAddressbookTests
                 return (from c in db.Contacts.Where(x => x.Deprecated == "0000-00-00 00:00:00") select c).ToList();
             }
         }
+        public static bool IsEmptyList()
+        {
+            if (GetAll().Count() == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

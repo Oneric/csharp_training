@@ -68,6 +68,17 @@ namespace WebAddressbookTests
                 return (from g in db.Groups select g).ToList();
             }
         }
+        public static bool IsEmptyList()
+        {
+            if (GetAll().Count() == 0 )
+            {
+                return true ;
+            }
+            else
+            {
+                return false ;
+            }
+        }
         public List<ContactData> GetContacts()
         {
             using (AddressbookDB db = new AddressbookDB())
